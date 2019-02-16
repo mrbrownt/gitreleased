@@ -7,4 +7,4 @@ build backend:
   services:
     - docker:dind
   script:
-    - ./playbook.sh build backend
+    - ./pipelines.sh build backend
