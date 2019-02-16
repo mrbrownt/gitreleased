@@ -34,7 +34,8 @@ build() {
 }
 
 backendBuild() {
-    docker build . -t stuffs
+    docker build . -t "${CI_COMMIT_REF_SLUG}"
+    docker push "${CI_COMMIT_REF_SLUG}"
 }
 
 case ${1} in
