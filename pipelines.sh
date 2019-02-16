@@ -34,7 +34,7 @@ build() {
 }
 
 backendBuild() {
-    BACKEND_TAG="${CI_REGISTRY}/backend:${CI_COMMIT_REF_SLUG}"
+    BACKEND_TAG="${CI_REGISTRY}/mrbrownt/gitreleased.app/backend:${CI_COMMIT_SHA}"
 
     docker build . -t "${BACKEND_TAG}"
     docker push "${BACKEND_TAG}"
