@@ -2,6 +2,7 @@ stages:
   - build
 
 build backend:
+  stage: build
   image: docker:stable
   services:
     - docker:dind
