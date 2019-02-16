@@ -34,8 +34,10 @@ build() {
 }
 
 backendBuild() {
-    docker build . -t "${CI_COMMIT_REF_SLUG}"
-    docker push "${CI_COMMIT_REF_SLUG}"
+    BACKEND_TAG="${CI_REGISTRY}/backend:${CI_COMMIT_REF_SLUG}"
+
+    docker build . -t "${BACKEND_TAG}"
+    docker push "${BACKEND_TAG}"
 }
 
 case ${1} in
