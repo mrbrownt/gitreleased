@@ -1,0 +1,9 @@
+stages:
+  - build
+
+build backend:
+  image: docker:stable
+  services:
+    - docker:dind
+  script:
+    - ./playbook.sh build backend
