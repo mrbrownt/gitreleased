@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -eo pipefail
 
@@ -21,7 +21,7 @@ build() {
     case ${1} in
         backend)
             cd backend
-            backend-build
+            backendBuild
             ;;
         frontend)
             cd frontend
@@ -33,7 +33,7 @@ build() {
     esac
 }
 
-backend-build() {
+backendBuild() {
     docker build . -t stuffs
 }
 
