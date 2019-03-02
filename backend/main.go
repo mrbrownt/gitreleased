@@ -25,7 +25,6 @@ func main() {
 	db, err := models.SetupDB()
 	if err != nil {
 		logrus.Panicln("falied to connect to database", err)
-		// panic("failed to connect to database")
 	}
 	defer db.Close()
 

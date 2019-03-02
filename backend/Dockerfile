@@ -1,12 +1,12 @@
-FROM golang:1.11 as build
+FROM golang:1.12 as build
 
-WORKDIR /go/src/gitlab.com/mrbrownt/gitreleased.app/backend
-COPY . /go/src/gitlab.com/mrbrownt/gitreleased.app/backend
+WORKDIR /app
+COPY . /app
 
 ENV GO111MODULE=on
 
 RUN go mod vendor && \
-    go install
+    go install -mod=vendor
 
 FROM gcr.io/distroless/base
 COPY --from=build /go/bin/backend /
