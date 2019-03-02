@@ -5,6 +5,8 @@ stages:
 test backend:
   stage: test
   image: golang:1.11
+  tags:
+    - docker
   script:
     - ./pipelines.sh test backend
   cache:
@@ -17,6 +19,8 @@ test backend:
 build backend:
   stage: build
   image: docker:stable
+  tags:
+    - docker
   services:
     - docker:dind
   script:
