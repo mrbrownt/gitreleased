@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -eo pipefail
+set -e
 
 [ "${TRACE}" ] && set -x
 
