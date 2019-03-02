@@ -1,24 +1,25 @@
 package main
 
 import (
-	"log"
-	"os"
-
-	"gitlab.com/mrbrownt/gitreleased.app/backend/handlers"
-	"gitlab.com/mrbrownt/gitreleased.app/backend/models"
-
-	"github.com/sirupsen/logrus"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+	"gitlab.com/mrbrownt/gitreleased.app/backend/config"
+	"gitlab.com/mrbrownt/gitreleased.app/backend/handlers"
+	"gitlab.com/mrbrownt/gitreleased.app/backend/models"
 )
 
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatalln(err)
+	}
+
+	gc, err := config.New()
+	if err != nil {
+		logrus.Fatalln(err)
 	}
 
 	db, err := models.SetupDB()
@@ -29,14 +30,17 @@ func main() {
 	defer db.Close()
 
 	// migrateDB(db)
-	models.AutoMigrate(db)
+	models.AutoMigrate()
+
+	err = config.Goth()
+	if err != nil {
+		logrus.Fatalln(err)
+	}
 
 	router := gin.Default()
 
-	ug := router.Group("/user")
+	handlers.AuthHandler(router.Group("/auth"))
+	handlers.UserHandler(router.Group("/user"))
 
-	handlers.UserHandler(ug)
-
-	port := os.Getenv("PORT")
-	router.Run("0.0.0.0:" + port)
+	router.Run("0.0.0.0:" + gc.Port)
 }

@@ -8,6 +8,7 @@ require (
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/jinzhu/gorm v1.9.2
 	github.com/joho/godotenv v1.3.0
+	github.com/markbates/goth v1.49.0 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/sirupsen/logrus v1.3.0
 	github.com/ugorji/go/codec v0.0.0-20181209151446-772ced7fd4c2 // indirect

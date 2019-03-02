@@ -4,42 +4,33 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/models"
 )
 
 // UserHandler propigates routes for users and whatnot
 func UserHandler(r *gin.RouterGroup) {
-	r.POST("/", create)
-	r.GET("/", get)
+	r.Use(authMiddleware())
+	r.GET("/", getUser)
 }
 
-// UserInput for new users
-type UserInput struct {
-	Email    string `json:"email"`
-	GithubID string `json:"github_id"`
-}
+func getUser(c *gin.Context) {
+	id, exist := c.Get("id")
+	if !exist {
+		// Not sure if this is what we want to do here
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
-func create(c *gin.Context) {
-	var json models.User
+	user := models.User{}
+
 	db := models.GetDB()
-
-	if err := c.ShouldBindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	db.Where("id = ?", id.(string)).First(&user)
+	if user.ID == uuid.Nil {
+		// Something really shitty has happened if you hit this!
+		c.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
 
-	if err := db.Create(&json).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	}
-
-	c.JSON(http.StatusOK, json)
-}
-
-func get(c *gin.Context) {
-	id := c.Query("id")
-	var user UserInput
-
-	user.Email = "someid" + id
 	c.JSON(http.StatusOK, user)
 }

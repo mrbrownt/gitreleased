@@ -3,6 +3,8 @@ FROM golang:1.11 as build
 WORKDIR /go/src/gitlab.com/mrbrownt/gitreleased.app/backend
 COPY . /go/src/gitlab.com/mrbrownt/gitreleased.app/backend
 
+ENV GO111MODULE=on
+
 RUN go get ./... && \
     go install
 

@@ -15,7 +15,11 @@ func GetDB() *gorm.DB {
 
 // SetupDB for useage through out application
 func SetupDB() (newDB *gorm.DB, err error) {
-	db, err = gorm.Open("mysql", "root:root@tcp(127.0.0.1:3316)/gomigrate?charset=utf8&parseTime=True")
+	db, err = gorm.Open(
+		"mysql",
+		// TODO: paramaterize this
+		"root:root@tcp(127.0.0.1:3316)/gomigrate?charset=utf8&parseTime=True",
+	)
 
 	debug := os.Getenv("DEBUG")
 	if debug != "" {
@@ -26,9 +30,10 @@ func SetupDB() (newDB *gorm.DB, err error) {
 }
 
 // AutoMigrate database, eventually replace with proper migrations
-func AutoMigrate(db *gorm.DB) {
+func AutoMigrate() {
 	db.AutoMigrate(
 		&User{},
 		&Release{},
+		&Repository{},
 	)
 }

@@ -1,5 +1,12 @@
 stages:
+  - test
   - build
+
+test backend:
+  stage: test
+  image: golang:1.11
+  script:
+    - ./pipelines.sh test backend
 
 build backend:
   stage: build
