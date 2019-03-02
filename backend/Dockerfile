@@ -5,7 +5,7 @@ COPY . /go/src/gitlab.com/mrbrownt/gitreleased.app/backend
 
 ENV GO111MODULE=on
 
-RUN go get ./... && \
+RUN go mod vendor && \
     go install
 
 FROM gcr.io/distroless/base

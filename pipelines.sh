@@ -14,6 +14,7 @@ testApp() {
     case ${1} in
         backend)
             cd backend
+            go mod vendor
             go test ./...
             ;;
         frontend)

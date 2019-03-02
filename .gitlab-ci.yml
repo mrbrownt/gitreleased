@@ -7,6 +7,12 @@ test backend:
   image: golang:1.11
   script:
     - ./pipelines.sh test backend
+  cache:
+    untracked: false
+    key: backend
+    paths:
+      - backend/vendor
+    policy: pull-push
 
 build backend:
   stage: build
@@ -15,3 +21,9 @@ build backend:
     - docker:dind
   script:
     - ./pipelines.sh build backend
+  cache:
+    untracked: false
+    key: backend
+    paths:
+      - backend/vendor
+    policy: pull
