@@ -1,9 +1,11 @@
 package models
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/jinzhu/gorm"
+	"gitlab.com/mrbrownt/gitreleased.app/backend/config"
 )
 
 var db *gorm.DB
@@ -15,11 +17,20 @@ func GetDB() *gorm.DB {
 
 // SetupDB for useage through out application
 func SetupDB() (newDB *gorm.DB, err error) {
-	db, err = gorm.Open(
-		"mysql",
-		// TODO: paramaterize this
-		"root:root@tcp(127.0.0.1:3316)/gomigrate?charset=utf8&parseTime=True",
+	gc, err := config.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s dbname=%s sslmode=disable",
+		gc.DBHost,
+		gc.DBPort,
+		gc.DBUser,
+		gc.DBName,
 	)
+
+	db, err = gorm.Open("postgres", dsn)
 
 	debug := os.Getenv("DEBUG")
 	if debug != "" {

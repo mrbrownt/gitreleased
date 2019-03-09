@@ -2,13 +2,16 @@ version: "3"
 
 services:
   db:
-    image: mariadb:latest
+    image: cockroachdb/cockroach
     volumes:
-      - mysql:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
+      - roachdb:/cockroach/cockroach-data
+    command: 
+      - start
+      - --insecure
     ports:
-      - 3316:3306
+      - 26257:26257
+      - 8080:8080
 
 volumes:
-  mysql:
+  roachdb:
+ 

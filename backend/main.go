@@ -14,7 +14,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		logrus.Fatalln(err)
+		logrus.Debugln("Not using .env")
 	}
 
 	gc, err := config.New()
