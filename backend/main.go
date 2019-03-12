@@ -36,7 +36,14 @@ func main() {
 		logrus.Fatalln(err)
 	}
 
+	// corsConf := cors.Config{
+	// 	AllowOrigins: []string{"http://localhost"},
+	// 	AllowMethods: []string{"GET", "PATCH", "PUT"},
+	// 	AllowHeaders: []string{"Access-Control-Request-Headers"},
+	// }
+
 	router := gin.Default()
+	// router.Use(cors.New(corsConf))
 
 	handlers.AuthHandler(router.Group("/auth"))
 	handlers.UserHandler(router.Group("/user"))

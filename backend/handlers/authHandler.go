@@ -34,7 +34,7 @@ func callback(c *gin.Context) {
 
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
-		c.AbortWithError(http.StatusTeapot, err)
+		c.AbortWithError(http.StatusNotImplemented, err)
 		return
 	}
 
@@ -111,8 +111,8 @@ func createJWT(user *models.User) (signedToken string, err error) {
 func returnUserAndJWT(c *gin.Context, u *models.User) {
 	jwt, err := createJWT(u)
 	if err != nil {
-		c.AbortWithStatus(http.StatusTeapot)
+		c.AbortWithStatus(http.StatusNotImplemented)
 	}
 	c.SetCookie("Authorization", jwt, 300, "/", "localhost", false, true)
-	c.JSON(http.StatusOK, u)
+	c.Redirect(http.StatusSeeOther, "http://localhost:8081/#/user")
 }
