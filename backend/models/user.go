@@ -10,14 +10,15 @@ import (
 
 // User they do things
 type User struct {
-	ID             uuid.UUID `json:"id" db:"id"`
-	CreatedAt      time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at" db:"updated_at"`
-	Email          string    `json:"email" db:"email"`
-	GithubID       string    `json:"github_id" db:"github_id"`
-	GithubUserName string    `json:"github_user_name" db:"github_user_name"`
-	FirstName      string    `json:"first_name" db:"first_name"`
-	LastName       string    `json:"last_name" db:"last_name"`
+	ID             uuid.UUID `json:"id,omitempty" db:"id"`
+	CreatedAt      time.Time `json:"-" db:"created_at"`
+	UpdatedAt      time.Time `json:"-" db:"updated_at"`
+	Email          string    `json:"email,omitempty" db:"email"`
+	GithubID       string    `json:"github_id,omitempty" db:"github_id"`
+	GithubUserName string    `json:"github_user_name,omitempty" db:"github_user_name"`
+	FirstName      string    `json:"first_name,omitempty" db:"first_name"`
+	LastName       string    `json:"last_name,omitempty" db:"last_name"`
+	AccessToken    string    `json:"access_token,omitempty" ab:"access_token"`
 }
 
 // Users are groups of people that do things
@@ -25,10 +26,6 @@ type Users []User
 
 // BeforeCreate is called from GORM
 func (u *User) BeforeCreate() (err error) {
-	if u.ID, err = uuid.NewV4(); err != nil {
-		return err
-	}
-
 	return validation.ValidateStruct(u,
 		validation.Field(&u.Email, is.Email),
 		validation.Field(&u.GithubID, validation.Required),

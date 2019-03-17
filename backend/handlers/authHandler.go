@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
+	"gitlab.com/mrbrownt/gitreleased.app/backend/config"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/models"
 )
 
@@ -66,9 +66,14 @@ func createUser(callbackUser *goth.User, user *models.User) (err error) {
 	user.Email = callbackUser.Email
 	user.FirstName = callbackUser.FirstName
 	user.LastName = callbackUser.LastName
+	user.AccessToken = callbackUser.AccessToken
 
-	db := models.GetDB()
-	err = db.Create(user).Error
+	conf, err := config.Get()
+	if err != nil {
+		return err
+	}
+
+	err = conf.DB.Create(user).Error
 	if err != nil {
 		return err
 	}
@@ -79,8 +84,12 @@ func createUser(callbackUser *goth.User, user *models.User) (err error) {
 // Checks if the user exists and returns a bunch of shit, this should be
 // refactored or renamed
 func doesUserExist(callbackUser *goth.User, user *models.User) (exist bool, err error) {
-	db := models.GetDB()
-	err = db.Where(&models.User{GithubID: callbackUser.UserID}).First(user).Error
+	conf, err := config.Get()
+	if err != nil {
+		return exist, err
+	}
+
+	err = conf.DB.Where(&models.User{GithubID: callbackUser.UserID}).First(user).Error
 
 	if err == gorm.ErrRecordNotFound {
 		return exist, nil
@@ -113,6 +122,6 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotImplemented)
 	}
-	c.SetCookie("Authorization", jwt, 300, "/", "localhost", false, true)
+	c.SetCookie("Authorization", jwt, 3600, "/", "localhost", false, true)
 	c.Redirect(http.StatusSeeOther, "http://localhost:8081/#/user")
 }
