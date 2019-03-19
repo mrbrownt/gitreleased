@@ -12,3 +12,10 @@ import { Component, Vue } from "vue-property-decorator"
 })
 export default class Home extends Vue {}
 </script>
+
+<style>
+img {
+    width: 50%;
+    max-height: auto;
+}
+</style>

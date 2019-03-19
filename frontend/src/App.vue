@@ -1,13 +1,12 @@
 <template>
     <div id="app">
+        <el-menu></el-menu>
         <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link v-if="user" to="/user">{{
-                user.github_user_name
-            }}</router-link>
+            <router-link to="/">Home</router-link>|
+            <router-link v-if="user" to="/user">{{ user.github_user_name }}</router-link>
             <router-link v-else to="/login">Login</router-link>
         </div>
-        <router-view />
+        <router-view/>
     </div>
 </template>
 
@@ -32,23 +31,28 @@ export default class extends Vue {
 
 
 <style>
+#body {
+    background-color: #c9e9f1;
+}
+
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: #1723a2;
 }
+
 #nav {
     padding: 30px;
 }
 
 #nav a {
     font-weight: bold;
-    color: #2c3e50;
+    color: #59667e;
 }
 
 #nav a.router-link-exact-active {
-    color: #b942a5;
+    color: #2e2268;
 }
 </style>
