@@ -1,21 +1,29 @@
 <template>
     <div>
-        <h1>Hello {{ loggedInUser.github_user_name }}!</h1>
+        <SubscribeForm />
+        <SubscriptionList
+            v-for="subscription in subscriptions"
+            :subcription="subscription"
+            :key="subscription.id"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator"
+import SubscribeForm from "@/components/Subscribe.vue"
+import SubscriptionList from "@/components/Subscriptions.vue"
 import user from "@/store/modules/user"
 import { User } from "@/store/models"
 
-@Component
+@Component({ components: { SubscribeForm, SubscriptionList } })
 export default class UserComponent extends Vue {
-    public loggedInUser: Partial<User> = {}
+    get subscriptions() {
+        return user.subscriptions
+    }
 
     public async created() {
-        await user.loadUser()
-        this.loggedInUser = user.user || {}
+        await user.loadSubs()
     }
 }
 </script>

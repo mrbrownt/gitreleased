@@ -7,7 +7,6 @@ CREATE TABLE users (
 	github_user_name STRING NULL,
 	first_name STRING NULL,
 	last_name STRING NULL,
-    full_name STRING AS (CONCAT(first_name, ' ', last_name)) STORED,
 	access_token STRING NULL,
     UNIQUE INDEX github_user_name_idx (github_user_name ASC)
 );

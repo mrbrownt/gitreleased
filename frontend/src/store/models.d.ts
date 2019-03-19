@@ -8,3 +8,11 @@ export interface User {
     first_name: string
     last_name: string
 }
+
+export interface Repo {
+    id: string
+    owner: string
+    name: string
+    description?: string
+    url: string
+}

@@ -111,7 +111,7 @@ func subscribeToRepo(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.Status(http.StatusCreated)
 }
 
 func createSubscription(userID, repoID uuid.UUID, db *gorm.DB) (err error) {
@@ -181,10 +181,18 @@ func getSubscriptions(c *gin.Context) {
 	conf, _ := config.Get()
 	repos := []models.Repository{}
 
-	conf.DB.Table("repositories").Select("*").Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo AND subscriptions.\"user\" = ?", k.(string)).Scan(&repos)
-	// if err != nil {
-	// 	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// }
+	err := conf.DB.
+		Table("repositories").
+		Select("*").
+		Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo AND subscriptions.\"user\" = ?", k.(string)).
+		Scan(&repos).Error
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
 
 	c.JSON(http.StatusOK, repos)
 }

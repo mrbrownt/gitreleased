@@ -29,8 +29,10 @@ func main() {
 
 	router := gin.Default()
 
+	api := router.Group("/api")
+
 	handlers.AuthHandler(router.Group("/auth"))
-	handlers.UserHandler(router.Group("/user"))
+	handlers.UserHandler(api.Group("/user"))
 
 	router.Run("0.0.0.0:" + gc.Port)
 }

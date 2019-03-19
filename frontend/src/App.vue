@@ -2,17 +2,32 @@
     <div id="app">
         <div id="nav">
             <router-link to="/">Home</router-link> |
-            <router-link to="/user">User</router-link> |
-            <router-link to="/login">Login</router-link>
+            <router-link v-if="user" to="/user">{{
+                user.github_user_name
+            }}</router-link>
+            <router-link v-else to="/login">Login</router-link>
         </div>
         <router-view />
     </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
+import { Vue, Component } from "vue-property-decorator"
 import { mapState } from "vuex"
-export default Vue.extend({})
+import store from "@/store/store"
+import user from "@/store/modules/user"
+import { User } from "@/store/models"
+
+@Component
+export default class extends Vue {
+    get user() {
+        return user.user
+    }
+
+    public async created() {
+        await user.loadUser()
+    }
+}
 </script>
 
 
@@ -34,6 +49,6 @@ export default Vue.extend({})
 }
 
 #nav a.router-link-exact-active {
-    color: #42b983;
+    color: #b942a5;
 }
 </style>
