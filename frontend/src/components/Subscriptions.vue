@@ -1,8 +1,12 @@
 <template>
-    <div v-bind="subscriptions">
-        <a @click="navigateToRepo" href="#">
-            <h2>{{ subcription.owner }}/{{ subcription.name }}</h2>
-        </a>
+    <div>
+        <router-link
+            v-bind:to="{ name: 'repo', params: { id: subcription.id } }"
+            class="item"
+            ><h3>
+                {{ subcription.owner }}/{{ subcription.name }}
+            </h3></router-link
+        >
         {{ subcription.description }}
     </div>
 </template>
@@ -16,14 +20,5 @@ import { mapState } from "vuex"
 @Component
 export default class SubscriptionList extends Vue {
     @Prop({ default: {} as Repo }) public subcription?: Repo
-
-    private navigateToRepo() {
-        if (this.subcription) {
-            this.$router.push({
-                name: "repo",
-                params: { id: this.subcription.id },
-            })
-        }
-    }
 }
 </script>
