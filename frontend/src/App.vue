@@ -1,12 +1,13 @@
 <template>
     <div id="app">
-        <el-menu></el-menu>
         <div id="nav">
             <router-link to="/">Home</router-link>|
-            <router-link v-if="user" to="/user">{{ user.github_user_name }}</router-link>
+            <router-link v-if="user" to="/user">{{
+                user.github_user_name
+            }}</router-link>
             <router-link v-else to="/login">Login</router-link>
         </div>
-        <router-view/>
+        <router-view />
     </div>
 </template>
 

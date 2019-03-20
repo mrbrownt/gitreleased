@@ -18,3 +18,8 @@ export async function getSubscriptions(): Promise<Repo[]> {
 export async function subscribe(repo: string) {
     await gitReleasedAPI.post("/api/user/subcribe?repo=" + repo)
 }
+
+export async function getRepo(repo: string) {
+    const response = await gitReleasedAPI.get("/api/repo/" + repo)
+    return response.data as Repo
+}

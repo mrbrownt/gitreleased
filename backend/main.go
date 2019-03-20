@@ -33,6 +33,7 @@ func main() {
 
 	handlers.AuthHandler(router.Group("/auth"))
 	handlers.UserHandler(api.Group("/user"))
+	handlers.RepoHandler(api.Group("/repo"))
 
 	router.Run("0.0.0.0:" + gc.Port)
 }

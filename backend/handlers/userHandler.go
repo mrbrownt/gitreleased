@@ -9,6 +9,7 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/shurcooL/githubv4"
+	"github.com/sirupsen/logrus"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/config"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/models"
 	"golang.org/x/oauth2"
@@ -97,6 +98,7 @@ func subscribeToRepo(c *gin.Context) {
 				http.StatusNotFound,
 				gin.H{"error": err.Error()},
 			)
+			logrus.Errorln(err.Error())
 			return
 		}
 		err = createSubscription(userUUID, repoModel.ID, conf.DB)

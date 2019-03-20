@@ -102,6 +102,9 @@ func doesUserExist(callbackUser *goth.User, user *models.User) (exist bool, err 
 	if user.GithubID == callbackUser.UserID {
 		exist = true
 	}
+
+	err = conf.DB.Model(user).Updates(models.User{AccessToken: callbackUser.AccessToken}).Error
+
 	return exist, err
 }
 

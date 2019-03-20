@@ -15,7 +15,7 @@ import user from "@/store/modules/user"
 
 @Component
 export default class SubscribeForm extends Vue {
-    public sub: { name: string } = { name: "github/repo" }
+    private sub: { name: string } = { name: "github/repo" }
 
     private async subscribe() {
         await user.addSub(this.sub.name)

@@ -27,6 +27,3 @@ export default class UserComponent extends Vue {
     }
 }
 </script>
-
-<style>
-</style>
