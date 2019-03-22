@@ -19,6 +19,7 @@ testApp() {
             ;;
         frontend)
             cd frontend
+            yarn install --pure-lockfile --cache-folder .yarn-cache
             ;;
         *)
             echo "unknown test suite"

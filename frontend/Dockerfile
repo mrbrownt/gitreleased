@@ -3,7 +3,7 @@ FROM node:11 as build
 COPY . /app
 WORKDIR /app
 
-RUN yarn install --pure-lockfile && \
+RUN yarn install --pure-lockfile --cache-folder .yarn-cache && \
     yarn build
 
 FROM nginx:alpine

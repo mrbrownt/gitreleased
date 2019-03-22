@@ -10,10 +10,22 @@ test backend:
   script:
     - ./pipelines.sh test backend
   cache:
-    untracked: false
     key: backend
     paths:
       - backend/vendor
+    policy: pull-push
+
+test frontend:
+  stage: test
+  image: node:11
+  tags:
+    - docker
+  script:
+    - ./pipelines.sh test frontend
+  cache:
+    key: backend
+    paths:
+      - frontend/.yarn-cache
     policy: pull-push
 
 build backend:
@@ -30,4 +42,20 @@ build backend:
     key: backend
     paths:
       - backend/vendor
+    policy: pull
+
+build frontend:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  services:
+    - docker:dind
+  script:
+    - ./pipelines.sh build frontend
+  cache:
+    untracked: false
+    key: frontend
+    paths:
+      - frontend/.yarn-cache
     policy: pull
