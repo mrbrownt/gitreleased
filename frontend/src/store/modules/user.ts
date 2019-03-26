@@ -4,9 +4,9 @@ import {
     getModule,
     MutationAction,
 } from "vuex-module-decorators"
-import store from "@/store"
 import { User, Repo } from "../models"
 import { getUser, getSubscriptions, subscribe } from "../api"
+import store from "@/store/store"
 
 @Module({
     dynamic: true,
@@ -20,7 +20,9 @@ class UserModule extends VuexModule {
 
     @MutationAction
     public async loadUser() {
+        store.state.loading = true
         const user = await getUser()
+        store.state.loading = false
         return { user }
     }
 

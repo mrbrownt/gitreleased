@@ -57,6 +57,7 @@ func callback(c *gin.Context) {
 
 func logout(c *gin.Context) {
 	c.SetCookie("Authorization", "", 0, "/", "localhost", false, true)
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
 // Creates a user from the callback information we got

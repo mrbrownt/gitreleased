@@ -1,27 +1,48 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link>|
-            <router-link v-if="user" to="/user">{{
-                user.github_user_name
-            }}</router-link>
-            <router-link v-else to="/login">Login</router-link>
-        </div>
-        <router-view />
-    </div>
+    <v-app id="inspire">
+        <v-navigation-drawer v-model="drawer" fixed app disable-resize-watcher>
+            <Sidebar />
+        </v-navigation-drawer>
+        <v-toolbar color="indigo" dark fixed app>
+            <v-toolbar-side-icon
+                @click.stop="drawer = !drawer"
+            ></v-toolbar-side-icon>
+            <v-toolbar-title>GitReleased</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn v-if="user" href="/auth/logout" flat>Logout</v-btn>
+                <v-btn v-else flat href="/auth/?provider=github">Login</v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
+        <v-content>
+            <v-container fluid fill-height>
+                <v-layout justify-center align-top>
+                    <router-view />
+                </v-layout>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
+
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator"
+import { Vue, Component, Prop } from "vue-property-decorator"
 import { mapState } from "vuex"
 import store from "@/store/store"
 import user from "@/store/modules/user"
 import { User } from "@/store/models"
+import Sidebar from "@/components/Sidebar.vue"
 
-@Component
+@Component({ components: { Sidebar } })
 export default class extends Vue {
+    private drawer: boolean = false
+
     get user() {
         return user.user
+    }
+
+    public get loading(): boolean {
+        return store.state.loading
     }
 
     public async created() {
@@ -32,28 +53,4 @@ export default class extends Vue {
 
 
 <style>
-#body {
-    background-color: #c9e9f1;
-}
-
-#app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #1723a2;
-}
-
-#nav {
-    padding: 30px;
-}
-
-#nav a {
-    font-weight: bold;
-    color: #59667e;
-}
-
-#nav a.router-link-exact-active {
-    color: #2e2268;
-}
 </style>

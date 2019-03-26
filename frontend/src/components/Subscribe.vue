@@ -1,12 +1,18 @@
 <template>
-    <form @submit="subscribe">
-        <div class="field">
-            <label class="label"
-                >Repo: <input v-model="sub.name" placeholder="test"
-            /></label>
-        </div>
-        <div><button type="submit">Subscribe</button></div>
-    </form>
+    <v-container class="elevation-1">
+        <v-layout row>
+            <v-flex pa1 grow>
+                <v-text-field
+                    v-model="newSubscription"
+                    label="Github Repo"
+                    required
+                ></v-text-field>
+            </v-flex>
+            <v-flex pa1 shrink>
+                <v-btn @click="subscribe" color="info">Subscribe</v-btn>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script lang="ts">
@@ -15,10 +21,10 @@ import user from "@/store/modules/user"
 
 @Component
 export default class SubscribeForm extends Vue {
-    private sub: { name: string } = { name: "github/repo" }
+    private newSubscription: string = ""
 
     private async subscribe() {
-        await user.addSub(this.sub.name)
+        await user.addSub(this.newSubscription)
     }
 }
 </script>

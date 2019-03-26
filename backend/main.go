@@ -1,8 +1,11 @@
 package main
 
 import (
+	"os"
+
+	"github.com/getsentry/raven-go"
+	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -10,12 +13,16 @@ import (
 	"gitlab.com/mrbrownt/gitreleased.app/backend/handlers"
 )
 
-func main() {
+func init() {
 	err := godotenv.Load()
 	if err != nil {
 		logrus.Debugln("Not using .env")
 	}
 
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
+}
+
+func main() {
 	gc, err := config.New()
 	if err != nil {
 		logrus.Fatalln(err)
@@ -28,6 +35,8 @@ func main() {
 	}
 
 	router := gin.Default()
+
+	router.Use(sentry.Recovery(raven.DefaultClient, false))
 
 	api := router.Group("/api")
 
