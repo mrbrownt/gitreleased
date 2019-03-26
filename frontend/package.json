@@ -1,37 +1,42 @@
 {
-    "name": "realworld",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "test:e2e": "vue-cli-service test:e2e",
-        "test:unit": "vue-cli-service test:unit"
-    },
-    "dependencies": {
-        "axios": "^0.18.0",
-        "pubsub-js": "^1.7.0",
-        "vue": "^2.6.6",
-        "vue-class-component": "^7.0.0",
-        "vue-property-decorator": "^8.0.0",
-        "vue-router": "^3.0.1",
-        "vuetify": "^1.5.7",
-        "vuex": "^3.0.1"
-    },
-    "devDependencies": {
-        "@types/jest": "^24.0.0",
-        "@types/pubsub-js": "^1.5.18",
-        "@vue/cli-plugin-babel": "^3.5.0",
-        "@vue/cli-plugin-e2e-cypress": "^3.5.0",
-        "@vue/cli-plugin-typescript": "^3.5.0",
-        "@vue/cli-plugin-unit-jest": "^3.5.0",
-        "@vue/cli-service": "^3.5.0",
-        "@vue/test-utils": "1.0.0-beta.29",
-        "babel-core": "7.0.0-bridge.0",
-        "ts-jest": "^24.0.0",
-        "typescript": "^3.2.1",
-        "vue-template-compiler": "^2.5.21",
-        "vuex-module-decorators": "^0.9.8"
-    }
+  "name": "gitreleased",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "pubsub-js": "^1.7.0",
+    "vue": "^2.6.6",
+    "vue-class-component": "^7.0.0",
+    "vue-property-decorator": "^8.0.0",
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.5.7",
+    "vuetify-loader": "^1.2.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.0",
+    "@types/pubsub-js": "^1.5.18",
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-e2e-cypress": "^3.5.0",
+    "@vue/cli-plugin-typescript": "^3.5.0",
+    "@vue/cli-plugin-unit-jest": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.2.1",
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-template-compiler": "^2.5.21",
+    "vuetify-loader": "^1.0.5",
+    "vuex-module-decorators": "^0.9.8"
+  }
 }

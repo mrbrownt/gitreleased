@@ -1,9 +1,9 @@
 import Vue from "vue"
 import Router from "vue-router"
-import Home from "./views/Home.vue"
-import User from "./views/User.vue"
-import Repo from "./views/Repo.vue"
-import Login from "./views/Login.vue"
+const Home = () => import("./views/Home.vue")
+const User = () => import("./views/User.vue")
+const Repo = () => import("./views/Repo.vue")
+const Login = () => import("./views/Login.vue")
 
 Vue.use(Router)
 
