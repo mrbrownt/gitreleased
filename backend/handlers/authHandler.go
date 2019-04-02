@@ -34,7 +34,7 @@ func callback(c *gin.Context) {
 
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
-		c.AbortWithError(http.StatusNotImplemented, err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -47,7 +47,7 @@ func callback(c *gin.Context) {
 	if !exist {
 		err = createUser(&user, u)
 		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err)
 			return
 		}
 	}

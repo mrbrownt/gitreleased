@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/getsentry/raven-go"
+	raven "github.com/getsentry/raven-go"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -14,12 +14,12 @@ import (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		logrus.Debugln("Not using .env")
-	}
+	_ = godotenv.Load()
 
-	raven.SetDSN(os.Getenv("SENTRY_DSN"))
+	err := raven.SetDSN(os.Getenv("SENTRY_DSN"))
+	if err != nil {
+		logrus.Fatalln(err)
+	}
 }
 
 func main() {
@@ -44,5 +44,8 @@ func main() {
 	handlers.UserHandler(api.Group("/user"))
 	handlers.RepoHandler(api.Group("/repo"))
 
-	router.Run("0.0.0.0:" + gc.Port)
+	err = router.Run("0.0.0.0:" + gc.Port)
+	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
+	}
 }

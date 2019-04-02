@@ -62,7 +62,7 @@ func subscribeToRepo(c *gin.Context) {
 		return
 	}
 
-	if slash := strings.Contains(repoQuery, "/"); slash == false {
+	if slash := strings.Contains(repoQuery, "/"); !slash {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "repo query not formatted correctly"})
 		return
 	}
@@ -101,7 +101,15 @@ func subscribeToRepo(c *gin.Context) {
 			logrus.Errorln(err.Error())
 			return
 		}
+
 		err = createSubscription(userUUID, repoModel.ID, conf.DB)
+		if err != nil {
+			c.AbortWithStatusJSON(
+				http.StatusInternalServerError,
+				gin.H{"error": err.Error()},
+			)
+			return
+		}
 	} else {
 		err = createSubscription(userUUID, repo.ID, conf.DB)
 	}
