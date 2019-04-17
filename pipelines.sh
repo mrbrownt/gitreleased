@@ -4,11 +4,7 @@ set -e
 
 [ "${TRACE}" ] && set -x
 
-if [ -n "${CI}" ]; then
-    if [ -z "${DOCKER_HOST}" ] && [ "${KUBERNETES_PORT}" ]; then
-        export DOCKER_HOST='tcp://localhost:2375'
-    fi
-fi
+export DOCKER_HOST='tcp://localhost:2375'
 
 setupGCP() {
     echo "${GCP_JSON}" | base64 -d >/gcp.json
@@ -18,10 +14,11 @@ setupGCP() {
 
 setupGitlabDocker() {
     if [ -n "${GITLAB_CI}" ]; then
-        docker login \
-            -p "${CI_REGISTRY_PASSWORD}" \
-            -u "${CI_REGISTRY_USER}" \
-            "${CI_REGISTRY}"
+        echo "${CI_REGISTRY_PASSWORD}" |
+            docker login \
+                --password-stdin \
+                -u "${CI_REGISTRY_USER}" \
+                "${CI_REGISTRY}"
     fi
 }
 
