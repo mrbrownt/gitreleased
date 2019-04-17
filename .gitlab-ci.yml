@@ -13,7 +13,7 @@ test auth:
   cache:
     key: auth
     paths:
-      - auth/vendor
+      - /go/pkg/mod
     policy: pull-push
   artifacts:
     untracked: false
@@ -32,7 +32,7 @@ test backend:
   cache:
     key: backend
     paths:
-      - backend/vendor
+      - /go/pkg/mod
     policy: pull-push
   artifacts:
     untracked: false
