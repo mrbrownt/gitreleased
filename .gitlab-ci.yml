@@ -5,7 +5,7 @@ stages:
 
 test auth:
   stage: test
-  image: golang:1.11
+  image: golang:1.12
   tags:
     - docker
   script:
@@ -24,7 +24,7 @@ test auth:
 
 test backend:
   stage: test
-  image: golang:1.11
+  image: golang:1.12
   tags:
     - docker
   script:
