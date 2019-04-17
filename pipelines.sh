@@ -4,7 +4,7 @@ set -e
 
 [ "${TRACE}" ] && set -x
 
-export DOCKER_HOST='tcp://localhost:2375'
+export DOCKER_HOST="tcp://docker:2375"
 
 setupGCP() {
     echo "${GCP_JSON}" | base64 -d >/gcp.json
