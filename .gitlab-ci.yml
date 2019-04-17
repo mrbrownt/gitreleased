@@ -105,5 +105,4 @@ deploy auth:
   only:
     refs:
       - tags
-  dependencies:
-    - null
+  dependencies: []
