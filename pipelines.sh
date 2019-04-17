@@ -89,6 +89,7 @@ deploy() {
         docker push "${GCR_IMAGE}"
 
         gcloud beta run deploy gitreleased-auth \
+            --project spheric-subject-165900 \
             --region us-central1 \
             --image "${GCR_IMAGE}" \
             --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",GIN_MODE=release
