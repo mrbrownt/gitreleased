@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - deploy
 
 test backend:
   stage: test
@@ -27,6 +28,22 @@ test frontend:
     paths:
       - frontend/.yarn-cache
     policy: pull-push
+
+build auth:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  services:
+    - docker:dind
+  script:
+    - ./pipelines.sh build auth
+  cache:
+    untracked: false
+    key: auth
+    paths:
+      - auth/vendor
+    policy: pull
 
 build backend:
   stage: build
@@ -59,3 +76,16 @@ build frontend:
     paths:
       - frontend/.yarn-cache
     policy: pull
+
+deploy auth:
+  stage: deploy
+  image: google/cloud-sdk
+  tags:
+    - docker
+  services:
+    - docker:dind
+  script:
+    - ./pipelines.sh deploy auth
+  only:
+    refs:
+      - tags
