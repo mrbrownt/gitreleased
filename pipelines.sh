@@ -79,7 +79,7 @@ build() {
 
 deploy() {
 
-    case ${2} in
+    case ${1} in
     auth)
         setupGitlabDocker
         setupGCP
