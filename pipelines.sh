@@ -27,6 +27,11 @@ setupGitlabDocker() {
 
 testApp() {
     case ${1} in
+    auth)
+        cd auth
+        go mod vendor
+        go test ./...
+        ;;
     backend)
         cd backend
         go mod vendor

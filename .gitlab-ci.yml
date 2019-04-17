@@ -3,6 +3,25 @@ stages:
   - build
   - deploy
 
+test auth:
+  stage: test
+  image: golang:1.11
+  tags:
+    - docker
+  script:
+    - ./pipelines.sh test auth
+  cache:
+    key: auth
+    paths:
+      - auth/vendor
+    policy: pull-push
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - auth/vendor
+
+
 test backend:
   stage: test
   image: golang:1.11
@@ -15,6 +34,11 @@ test backend:
     paths:
       - backend/vendor
     policy: pull-push
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - backend/vendor
 
 test frontend:
   stage: test
@@ -24,7 +48,7 @@ test frontend:
   script:
     - ./pipelines.sh test frontend
   cache:
-    key: backend
+    key: frontend
     paths:
       - frontend/.yarn-cache
     policy: pull-push
@@ -38,12 +62,8 @@ build auth:
     - docker:dind
   script:
     - ./pipelines.sh build auth
-  cache:
-    untracked: false
-    key: auth
-    paths:
-      - auth/vendor
-    policy: pull
+  dependencies:
+    - test auth
 
 build backend:
   stage: build
@@ -54,12 +74,8 @@ build backend:
     - docker:dind
   script:
     - ./pipelines.sh build backend
-  cache:
-    untracked: false
-    key: backend
-    paths:
-      - backend/vendor
-    policy: pull
+  dependencies:
+    - test backend
 
 build frontend:
   stage: build
