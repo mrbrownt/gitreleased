@@ -5,8 +5,7 @@ COPY . /app
 
 ENV GO111MODULE=on
 
-RUN go mod vendor && \
-    go install -mod=vendor
+RUN go install -mod=vendor
 
 FROM gcr.io/distroless/base
 COPY --from=build /go/bin/backend /
