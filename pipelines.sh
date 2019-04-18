@@ -10,6 +10,7 @@ setupGCP() {
     echo "${GCP_JSON}" | base64 -d >/gcp.json
     gcloud auth activate-service-account --key-file /gcp.json
     gcloud auth configure-docker
+    gcloud beta auth configure-docker
 }
 
 setupGitlabDocker() {
