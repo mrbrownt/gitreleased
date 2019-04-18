@@ -11,6 +11,7 @@ setupGCP() {
     gcloud auth activate-service-account --key-file /gcp.json
     gcloud beta auth activate-service-account --key-file /gcp.json
     gcloud auth configure-docker
+    gcloud config set account gitreleased-cloud-run@spheric-subject-165900.iam.gserviceaccount.com
 }
 
 setupGitlabDocker() {
