@@ -2,15 +2,13 @@ version: "3"
 
 services:
   db:
-    image: cockroachdb/cockroach
-    volumes:
-      - roachdb:/cockroach/cockroach-data
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=localdev
     command:
-      - start
-      - --insecure
+      - postgres
     ports:
-      - 26257:26257
-      - 8080:8080
+      - 5432:5432
 
 volumes:
-  roachdb:
+  postgresql:

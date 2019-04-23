@@ -2,17 +2,18 @@ package config
 
 import (
 	"errors"
-	"os"
 
+	"github.com/gobuffalo/envy"
 	"github.com/jinzhu/gorm"
 )
 
 // Global config required for application
 type Global struct {
-	Port      string
-	BaseURL   string
-	DB        *gorm.DB
-	callCount int
+	Port        string
+	BaseURL     string
+	DB          *gorm.DB
+	Environment string
+	callCount   int
 }
 
 var globalConf Global
@@ -24,19 +25,12 @@ func New() (gc Global, err error) {
 		return gc, errors.New("conf.New() callend more than once")
 	}
 
-	globalConf.Port = getEnv("PORT", "3000")
-	globalConf.BaseURL = getEnv("BASE_URL", "localhost:"+globalConf.Port)
+	globalConf.Port = envy.Get("PORT", "3000")
+	globalConf.BaseURL = envy.Get("BASE_URL", "localhost:"+globalConf.Port)
+	globalConf.Environment = envy.Get("ENVIRONMENT", "development")
 
 	err = setupDB()
 	return globalConf, err
-}
-
-func getEnv(key, def string) (value string) {
-	value = os.Getenv(key)
-	if value == "" {
-		value = def
-	}
-	return value
 }
 
 // Get global config after it's been setup

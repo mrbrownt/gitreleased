@@ -1,11 +1,7 @@
 CREATE TABLE subscriptions (
-	id INT NOT NULL DEFAULT unique_rowid(),
-	"user" UUID NOT NULL,
-	repo UUID NOT NULL,
-	CONSTRAINT "primary" PRIMARY KEY (id ASC),
-	CONSTRAINT fk_user_ref_users FOREIGN KEY ("user") REFERENCES users (id),
-	INDEX subscriptions_user_idx ("user" ASC),
-	CONSTRAINT fk_repo_ref_repositories FOREIGN KEY (repo) REFERENCES repositories (id),
-	INDEX subscriptions_repo_idx (repo ASC),
-	FAMILY "primary" (id, "user", repo)
+	user_id UUID NOT NULL,
+	repo_id UUID NOT NULL,
+	CONSTRAINT "subscriptions_repo_id_fkey" FOREIGN KEY ("repo_id") REFERENCES "public"."repositories"("id"),
+    CONSTRAINT "subscriptions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id"),
+	PRIMARY KEY (user_id, repo_id)
 );

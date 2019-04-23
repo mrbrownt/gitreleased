@@ -106,3 +106,21 @@ deploy auth:
     refs:
       - tags
   dependencies: []
+  environment:
+    name: production
+
+deploy backend:
+  stage: deploy
+  image: google/cloud-sdk
+  tags:
+    - docker
+  services:
+    - docker:dind
+  script:
+    - ./pipelines.sh deploy backend
+  only:
+    refs:
+      - tags
+  dependencies: []
+  environment:
+    name: production

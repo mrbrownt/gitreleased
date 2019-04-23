@@ -84,16 +84,33 @@ deploy() {
 
         GCR_IMAGE="us.gcr.io/spheric-subject-165900/gitreleased/auth:${CI_COMMIT_REF_NAME}"
 
-        AUTH_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/auth:${CI_COMMIT_SHA}"
-        docker pull "${AUTH_TAG}"
-        docker tag "${AUTH_TAG}" "${GCR_IMAGE}"
+        GITLAB_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/auth:${CI_COMMIT_SHA}"
+        docker pull "${GITLAB_TAG}"
+        docker tag "${GITLAB_TAG}" "${GCR_IMAGE}"
         docker push "${GCR_IMAGE}"
 
         gcloud beta run deploy gitreleased-auth \
             --project spheric-subject-165900 \
             --region us-central1 \
             --image "${GCR_IMAGE}" \
-            --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",GIN_MODE=release
+            --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",ENVIRONMENT=production,SESSION_SECRET="${SESSION_SECRET}"
+        ;;
+    backend)
+        setupGitlabDocker
+        setupGCP
+
+        GCR_IMAGE="us.gcr.io/spheric-subject-165900/gitreleased/backend:${CI_COMMIT_REF_NAME}"
+
+        GITLAB_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/backend:${CI_COMMIT_SHA}"
+        docker pull "${GITLAB_TAG}"
+        docker tag "${GITLAB_TAG}" "${GCR_IMAGE}"
+        docker push "${GCR_IMAGE}"
+
+        gcloud beta run deploy gitreleased-backend \
+            --project spheric-subject-165900 \
+            --region us-central1 \
+            --image "${GCR_IMAGE}" \
+            --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN="${GITLAB_ACCESS_TOKEN}",ENVIRONMENT=production,SESSION_SECRET="${SESSION_SECRET}"
         ;;
     esac
 }

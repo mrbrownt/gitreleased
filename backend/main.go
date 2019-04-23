@@ -40,7 +40,6 @@ func main() {
 
 	api := router.Group("/api")
 
-	handlers.AuthHandler(router.Group("/auth"))
 	handlers.UserHandler(api.Group("/user"))
 	handlers.RepoHandler(api.Group("/repo"))
 
