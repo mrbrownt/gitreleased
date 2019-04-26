@@ -120,7 +120,7 @@ deploy backend:
     - ./pipelines.sh deploy backend
   only:
     refs:
-      - tags
+      - master
   dependencies: []
   environment:
     name: production
