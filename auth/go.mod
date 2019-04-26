@@ -14,8 +14,9 @@ require (
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/rogpeppe/go-internal v1.3.0 // indirect
 	gitlab.com/mrbrownt/gitreleased.app/backend v0.0.0-20190422155230-3e4411fa6c74
-	golang.org/x/net v0.0.0-20190420063019-afa5a82059c6 // indirect
+	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
+	golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a // indirect
-	golang.org/x/sys v0.0.0-20190419153524-e8e3143a4f4a // indirect
+	golang.org/x/sys v0.0.0-20190426135247-a129542de9ae // indirect
 	google.golang.org/appengine v1.5.0 // indirect
 )
