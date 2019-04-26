@@ -110,7 +110,7 @@ deploy() {
             --project spheric-subject-165900 \
             --region us-central1 \
             --image "${GCR_IMAGE}" \
-            --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN="${GITLAB_ACCESS_TOKEN}",ENVIRONMENT=production,SESSION_SECRET="${SESSION_SECRET}"
+            --set-env-vars GITHUB_KEY="${GITHUB_KEY}",GITHUB_SECRET="${GITHUB_SECRET}",GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN="${GITLAB_ACCESS_TOKEN}",ENVIRONMENT=production,SESSION_SECRET="${SESSION_SECRET}",CLOUDSQL=yes
         ;;
     esac
 }

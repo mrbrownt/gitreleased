@@ -28,7 +28,14 @@ func setupDB() (err error) {
 		envy.Get("DB_SSLMODE", "disable"),
 	)
 
-	db, err := gorm.Open("postgres", dsn)
+	dbConnType := ""
+	if cloudsql := envy.Get("CLOUDSQL", ""); cloudsql != "" {
+		dbConnType = "cloudsqlpostgres"
+	} else {
+		dbConnType = "postgres"
+	}
+
+	db, err := gorm.Open(dbConnType, dsn)
 	if err != nil {
 		return err
 	}

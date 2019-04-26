@@ -6,11 +6,14 @@ import (
 	raven "github.com/getsentry/raven-go"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/config"
 	"gitlab.com/mrbrownt/gitreleased.app/backend/handlers"
+
+	// Postgres and cloudql postgres drivers
+	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func init() {
