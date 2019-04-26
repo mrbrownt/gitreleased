@@ -32,11 +32,6 @@ func main() {
 	}
 	defer gc.DB.Close()
 
-	err = config.Goth()
-	if err != nil {
-		logrus.Fatalln(err)
-	}
-
 	router := gin.Default()
 
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
