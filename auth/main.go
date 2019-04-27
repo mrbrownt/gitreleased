@@ -9,10 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/envy"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/github"
+
+	// Postgres and cloudql postgres drivers
+	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func init() {
