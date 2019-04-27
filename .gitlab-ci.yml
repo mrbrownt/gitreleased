@@ -104,7 +104,7 @@ deploy auth:
     - ./pipelines.sh deploy auth
   only:
     refs:
-      - tags
+      - master
   dependencies: []
   environment:
     name: production
