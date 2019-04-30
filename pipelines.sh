@@ -93,7 +93,8 @@ deploy() {
             --project spheric-subject-165900 \
             --region us-central1 \
             --image "${GCR_IMAGE}" \
-            --set-env-vars "GITHUB_KEY=${GITHUB_KEY},GITHUB_SECRET=${GITHUB_SECRET},GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN},ENVIRONMENT=production,SESSION_SECRET=${SESSION_SECRET},CLOUDSQL=yes,DB_HOST=spheric-subject-165900:us-central1:gitreleased,DB_PASS=${DB_PASS}"
+            --set-env-vars "GITHUB_KEY=${GITHUB_KEY},GITHUB_SECRET=${GITHUB_SECRET},GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN},ENVIRONMENT=production,SESSION_SECRET=${SESSION_SECRET},CLOUDSQL=yes,DB_HOST=spheric-subject-165900:us-central1:gitreleased,DB_PASS=${DB_PASS}" \
+            --set-env-vars BASE_URL=auth.gitreleased.app
         ;;
     backend)
         setupGitlabDocker
