@@ -68,7 +68,7 @@ func setupGoth(config config.Global) {
 	})
 	gothic.Store = store
 
-	callbackURL := fmt.Sprintf("%s/callback/github", config.BaseURL)
+	callbackURL := fmt.Sprintf("https://%s/callback/github", config.BaseURL)
 
 	// Auth providers
 	goth.UseProviders(
