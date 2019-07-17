@@ -15,11 +15,6 @@ test backend:
     paths:
       - /go/pkg/mod
     policy: pull-push
-  artifacts:
-    untracked: false
-    expire_in: 30 days
-    paths:
-      - backend/vendor
 
 test frontend:
   stage: test
@@ -28,6 +23,7 @@ test frontend:
     - docker
   script:
     - ./pipelines.sh test frontend
+  dependencies: []
 
 build backend:
   stage: build
@@ -36,8 +32,7 @@ build backend:
     - docker
   script:
     - ./pipelines.sh build backend
-  dependencies:
-    - test backend
+  dependencies: []
 
 build frontend:
   stage: build
