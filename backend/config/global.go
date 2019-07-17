@@ -25,7 +25,7 @@ func Get() (gc Global) {
 	}
 
 	globalConf.Port = envy.Get("PORT", "3000")
-	globalConf.BaseURL = envy.Get("BASE_URL", "localhost")
+	globalConf.BaseURL = envy.Get("BASE_URL", "localhost:8080")
 	globalConf.Environment = envy.Get("ENVIRONMENT", "development")
 
 	err := setupDB()
