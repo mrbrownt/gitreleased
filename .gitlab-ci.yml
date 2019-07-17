@@ -28,15 +28,10 @@ test frontend:
     - docker
   script:
     - ./pipelines.sh test frontend
-  cache:
-    key: frontend
-    paths:
-      - frontend/.yarn-cache
-    policy: pull-push
 
 build backend:
   stage: build
-  image: docker:stable
+  image: google/cloud-sdk:alpine
   tags:
     - docker
   services:
@@ -48,23 +43,17 @@ build backend:
 
 build frontend:
   stage: build
-  image: docker:stable
+  image: google/cloud-sdk:alpine
   tags:
     - docker
   services:
     - docker:dind
   script:
     - ./pipelines.sh build frontend
-  cache:
-    untracked: false
-    key: frontend
-    paths:
-      - frontend/.yarn-cache
-    policy: pull
 
 deploy frontend:
   stage: deploy
-  image: google/cloud-sdk
+  image: google/cloud-sdk:alpine
   tags:
     - docker
   services:
@@ -80,7 +69,7 @@ deploy frontend:
 
 deploy backend:
   stage: deploy
-  image: google/cloud-sdk
+  image: google/cloud-sdk:alpine
   tags:
     - docker
   services:
