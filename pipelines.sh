@@ -17,9 +17,9 @@ setupGitlabDocker() {
     if [ -n "${GITLAB_CI}" ]; then
         echo "${CI_REGISTRY_PASSWORD}" |
             docker login \
-                --password-stdin \
-                -u "${CI_REGISTRY_USER}" \
-                "${CI_REGISTRY}"
+        --password-stdin \
+        -u "${CI_REGISTRY_USER}" \
+        "${CI_REGISTRY}"
     fi
 }
 
@@ -86,9 +86,9 @@ deploy() {
         docker push "${GCR_IMAGE}"
 
         gcloud beta run deploy gitreleased-frontend \
-            --project spheric-subject-165900 \
-            --region us-central1 \
-            --image "${GCR_IMAGE}"
+        --project spheric-subject-165900 \
+        --region us-central1 \
+        --image "${GCR_IMAGE}"
         ;;
     backend)
         setupGitlabDocker
@@ -102,10 +102,20 @@ deploy() {
         docker push "${GCR_IMAGE}"
 
         gcloud beta run deploy gitreleased-backend \
-            --project spheric-subject-165900 \
-            --region us-central1 \
-            --image "${GCR_IMAGE}" \
-            --set-env-vars "GITHUB_KEY=${GITHUB_KEY},GITHUB_SECRET=${GITHUB_SECRET},GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN},ENVIRONMENT=production,SESSION_SECRET=${SESSION_SECRET},CLOUDSQL=yes,DB_HOST=spheric-subject-165900:us-central1:gitreleased,DB_PASS=${DB_PASS}"
+        --project spheric-subject-165900 \
+        --region us-central1 \
+        --image "${GCR_IMAGE}" \
+        --set-env-vars "GITHUB_KEY=${GITHUB_KEY}"
+        --set-env-vars "GITHUB_SECRET=${GITHUB_SECRET}"
+        --set-env-vars "GITLAB_USER=mrbrownt"
+        --set-env-vars "GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN}"
+        --set-env-vars "ENVIRONMENT=production"
+        --set-env-vars "SESSION_SECRET=${SESSION_SECRET}"
+        --set-env-vars "CLOUDSQL=yes"
+        --set-env-vars "DB_HOST=spheric-subject-165900:us-central1:gitreleased"
+        --set-env-vars "DB_PASS=${DB_PASS}"
+        --set-env-vars "DB_PASS=${DB_PASS}"
+        --set-env-vars "BASE_URL=api.gitreleased.app"
         ;;
     esac
 }

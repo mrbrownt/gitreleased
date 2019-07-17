@@ -29,6 +29,9 @@ func setupGoth() {
 	gothic.Store = store
 
 	callbackURL := fmt.Sprintf("http://%s/auth/callback/github", globalConf.BaseURL)
+	if secure {
+		callbackURL = fmt.Sprintf("https://%s/auth/callback/github", globalConf.BaseURL)
+	}
 
 	// Auth providers
 	goth.UseProviders(

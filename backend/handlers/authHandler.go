@@ -56,7 +56,8 @@ func callback(c *gin.Context) {
 }
 
 func logout(c *gin.Context) {
-	c.SetCookie("Authorization", "", 0, "/", "localhost", false, true)
+	url := config.Get().BaseURL
+	c.SetCookie("Authorization", "", 0, "/", url, false, true)
 	c.Redirect(http.StatusSeeOther, "/")
 }
 
@@ -120,6 +121,8 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotImplemented)
 	}
-	c.SetCookie("Authorization", jwt, 3600, "/", "localhost", false, true)
+
+	url := config.Get().BaseURL
+	c.SetCookie("Authorization", jwt, 3600, "/", url, false, true)
 	c.Redirect(http.StatusSeeOther, "/#/user")
 }
