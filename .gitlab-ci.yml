@@ -93,7 +93,7 @@ build frontend:
       - frontend/.yarn-cache
     policy: pull
 
-deploy auth:
+deploy frontend:
   stage: deploy
   image: google/cloud-sdk
   tags:
@@ -101,7 +101,7 @@ deploy auth:
   services:
     - docker:dind
   script:
-    - ./pipelines.sh deploy auth
+    - ./pipelines.sh deploy frontend
   only:
     refs:
       - master

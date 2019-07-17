@@ -78,27 +78,21 @@ build() {
 deploy() {
 
     case ${1} in
-    auth)
+    frontend)
         setupGitlabDocker
         setupGCP
 
-        GCR_IMAGE="us.gcr.io/spheric-subject-165900/gitreleased/auth:${CI_COMMIT_REF_NAME}"
+        GCR_IMAGE="us.gcr.io/spheric-subject-165900/gitreleased/frontend:${CI_COMMIT_REF_NAME}"
 
-        GITLAB_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/auth:${CI_COMMIT_SHA}"
+        GITLAB_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/frontend:${CI_COMMIT_SHA}"
         docker pull "${GITLAB_TAG}"
         docker tag "${GITLAB_TAG}" "${GCR_IMAGE}"
         docker push "${GCR_IMAGE}"
 
-        gcloud beta run deploy gitreleased-auth \
+        gcloud beta run deploy gitreleased-frontend \
             --project spheric-subject-165900 \
             --region us-central1 \
-            --image "${GCR_IMAGE}" \
-            --set-env-vars "GITHUB_KEY=${GITHUB_KEY},GITHUB_SECRET=${GITHUB_SECRET}" \
-            --set-env-vars "GITLAB_USER=mrbrownt,GITLAB_ACCESS_TOKEN=${GITLAB_ACCESS_TOKEN}" \
-            --set-env-vars "ENVIRONMENT=production,CLOUDSQL=yes" \
-            --set-env-vars "SESSION_SECRET=${SESSION_SECRET},DB_HOST=spheric-subject-165900:us-central1:gitreleased" \
-            --set-env-vars "DB_PASS=${DB_PASS}" \
-            --set-env-vars "BASE_URL=auth.gitreleased.app"
+            --image "${GCR_IMAGE}"
         ;;
     backend)
         setupGitlabDocker
