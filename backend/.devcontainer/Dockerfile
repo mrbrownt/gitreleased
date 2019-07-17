@@ -7,6 +7,7 @@ FROM golang:1
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
+ENV GOPROXY=https://proxy.golang.org
 
 # Configure apt, install packages and tools
 RUN apt-get update \

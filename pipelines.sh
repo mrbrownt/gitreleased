@@ -25,12 +25,8 @@ setupGitlabDocker() {
 
 testApp() {
     case ${1} in
-    auth)
-        cd auth
-        go mod vendor
-        go test ./...
-        ;;
     backend)
+        export GOPROXY=https://proxy.golang.org
         cd backend
         go mod vendor
         go test ./...
