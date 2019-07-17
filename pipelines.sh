@@ -13,8 +13,8 @@ GCR_BACKEND_IMG="${GCR_IMAGE_BASE}/backend:${CI_COMMIT_SHA}"
 setupGCP() {
     echo "${GCP_JSON}" | base64 -d >/gcp.json
     gcloud auth activate-service-account --key-file /gcp.json
-    gcloud auth configure-docker
     gcloud config set account gitreleased-cloud-run@spheric-subject-165900.iam.gserviceaccount.com
+    gcloud config set project spheric-subject-165900
 }
 
 testApp() {
