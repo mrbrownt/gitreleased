@@ -41,10 +41,10 @@ import Sidebar from "@/components/Sidebar.vue"
 @Component({ components: { Sidebar } })
 export default class extends Vue {
     private drawer: boolean = false
-    private authProviderGithub: string = process.env.production
+    private authProviderGithub: string = process.env.NODE_ENV === 'production'
         ? "https://api.gitreleased.app/auth/?provider=github"
         : "/auth?provider=github"
-    private authLogout: string = process.env.production
+    private authLogout: string = process.env.NODE_ENV === 'production'
         ? "https://api.gitreleased/auth/logout"
         : "/auth/logout"
 

@@ -3,7 +3,7 @@ import { User, Repo } from "./models"
 import PubSub from "pubsub-js"
 
 export const gitReleasedAPI = axios.create({
-    baseURL: process.env.production
+    baseURL: process.env.NODE_ENV === 'production'
         ? "https://api.gitreleased.app"
         : "http://localhost:8080",
 })
