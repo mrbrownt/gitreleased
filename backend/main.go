@@ -41,6 +41,10 @@ func main() {
 	auth := router.Group("/auth")
 	handlers.AuthHandler(auth)
 
+	if gc.Environment == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	err := router.Run("0.0.0.0:" + gc.Port)
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
