@@ -43,7 +43,7 @@ build frontend:
 
 deploy frontend:
   stage: deploy
-  image: google/cloud-sdk:alpine
+  image: google/cloud-sdk:slim
   tags:
     - docker
   script:
@@ -57,7 +57,7 @@ deploy frontend:
 
 deploy backend:
   stage: deploy
-  image: google/cloud-sdk:alpine
+  image: google/cloud-sdk:slim
   tags:
     - docker
   script:
