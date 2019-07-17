@@ -17,16 +17,6 @@ setupGCP() {
     gcloud config set account gitreleased-cloud-run@spheric-subject-165900.iam.gserviceaccount.com
 }
 
-setupGitlabDocker() {
-    if [ -n "${GITLAB_CI}" ]; then
-        echo "${CI_REGISTRY_PASSWORD}" |
-            docker login \
-                --password-stdin \
-                -u "${CI_REGISTRY_USER}" \
-                "${CI_REGISTRY}"
-    fi
-}
-
 testApp() {
     case ${1} in
     backend)
@@ -47,8 +37,6 @@ testApp() {
 }
 
 build() {
-    setupGitlabDocker
-
     case ${1} in
     auth)
         cd auth

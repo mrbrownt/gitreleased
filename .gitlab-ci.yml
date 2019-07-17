@@ -34,8 +34,6 @@ build backend:
   image: google/cloud-sdk:alpine
   tags:
     - docker
-  services:
-    - docker:dind
   script:
     - ./pipelines.sh build backend
   dependencies:
@@ -46,8 +44,6 @@ build frontend:
   image: google/cloud-sdk:alpine
   tags:
     - docker
-  services:
-    - docker:dind
   script:
     - ./pipelines.sh build frontend
 
@@ -56,8 +52,6 @@ deploy frontend:
   image: google/cloud-sdk:alpine
   tags:
     - docker
-  services:
-    - docker:dind
   script:
     - ./pipelines.sh deploy frontend
   only:
@@ -72,8 +66,6 @@ deploy backend:
   image: google/cloud-sdk:alpine
   tags:
     - docker
-  services:
-    - docker:dind
   script:
     - ./pipelines.sh deploy backend
   only:
