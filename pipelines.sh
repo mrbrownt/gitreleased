@@ -15,6 +15,7 @@ setupGCP() {
     gcloud auth activate-service-account --key-file /gcp.json
     gcloud config set account gitreleased-cloud-run@spheric-subject-165900.iam.gserviceaccount.com
     gcloud config set project spheric-subject-165900
+    gcloud config list
 }
 
 testApp() {
