@@ -114,7 +114,6 @@ deploy() {
             --set-env-vars "CLOUDSQL=yes" \
             --set-env-vars "DB_HOST=spheric-subject-165900:us-central1:gitreleased" \
             --set-env-vars "DB_PASS=${DB_PASS}" \
-            --set-env-vars "DB_PASS=${DB_PASS}" \
             --set-env-vars "BASE_URL=api.gitreleased.app"
         ;;
     esac
