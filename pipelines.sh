@@ -39,22 +39,19 @@ testApp() {
 
 build() {
     case ${1} in
-    auth)
-        cd auth
-        AUTH_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/auth:${CI_COMMIT_SHA}"
-        docker build . -t "${AUTH_TAG}"
-        docker push "${AUTH_TAG}"
-        ;;
     backend)
         cd backend
         setupGCP
-        gcloud builds submit --tag="${GCR_BACKEND_IMG}" .
+        gcloud builds submit \
+            --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
+            --tag="${GCR_BACKEND_IMG}" .
         ;;
     frontend)
         cd frontend
-        FRONTEND_TAG="${CI_REGISTRY}/${CI_PROJECT_PATH}/frontend:${CI_COMMIT_SHA}"
-        docker build . -t "${FRONTEND_TAG}"
-        docker push "${FRONTEND_TAG}"
+        setupGCP
+        gcloud builds submit \
+            --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
+            --tag="${GCR_FRONTEND_IMG}" .
         ;;
     *)
         echo "unknown build product"
