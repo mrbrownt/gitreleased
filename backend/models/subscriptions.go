@@ -6,7 +6,6 @@ import (
 
 // Subscriptions to repos from users
 type Subscriptions struct {
-	ID   int       `json:"-" db:"id"`
-	User uuid.UUID `json:"user" db:"user"`
-	Repo uuid.UUID `json:"repo" db:"repo"`
+	UserID uuid.UUID `gorm:"user_id" json:"user"`
+	RepoID uuid.UUID `gorm:"repo_id" json:"repo" `
 }

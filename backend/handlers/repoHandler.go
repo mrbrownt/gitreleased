@@ -23,11 +23,7 @@ func getRepo(c *gin.Context) {
 		return
 	}
 
-	conf, err := config.Get()
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
+	conf := config.Get()
 
 	repoUUID, err := uuid.FromString(repoParam)
 	if err != nil {

@@ -4,10 +4,10 @@ module.exports = {
     devServer: {
         proxy: {
             "^/api": {
-                target: "http://localhost:3000",
+                target: "http://host.docker.internal:3000",
             },
             "^/auth": {
-                target: "http://localhost:3000",
+                target: "http://host.docker.internal:3000",
             },
         },
     },

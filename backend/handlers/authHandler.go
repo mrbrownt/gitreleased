@@ -69,10 +69,7 @@ func createUser(callbackUser *goth.User, user *models.User) (err error) {
 	user.LastName = callbackUser.LastName
 	user.AccessToken = callbackUser.AccessToken
 
-	conf, err := config.Get()
-	if err != nil {
-		return err
-	}
+	conf := config.Get()
 
 	err = conf.DB.Create(user).Error
 	if err != nil {
@@ -85,10 +82,7 @@ func createUser(callbackUser *goth.User, user *models.User) (err error) {
 // Checks if the user exists and returns a bunch of shit, this should be
 // refactored or renamed
 func doesUserExist(callbackUser *goth.User, user *models.User) (exist bool, err error) {
-	conf, err := config.Get()
-	if err != nil {
-		return exist, err
-	}
+	conf := config.Get()
 
 	err = conf.DB.Where(&models.User{GithubID: callbackUser.UserID}).First(user).Error
 
@@ -127,5 +121,5 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 		c.AbortWithStatus(http.StatusNotImplemented)
 	}
 	c.SetCookie("Authorization", jwt, 3600, "/", "localhost", false, true)
-	c.Redirect(http.StatusSeeOther, "http://localhost:8081/#/user")
+	c.Redirect(http.StatusSeeOther, "/#/user")
 }

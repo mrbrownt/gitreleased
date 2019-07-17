@@ -1,0 +1,16 @@
+{
+    "name": "Go & Postegres",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/workspace",
+    "appPort": 3000,
+    // Uncomment the next line to run commands after the container is created.
+    // "postCreateCommand": "go version",
+    "extensions": [
+        "ms-vscode.go",
+        "redhat.vscode-yaml"
+    ],
+    "settings": {
+        "go.gopath": "/go"
+    }
+}

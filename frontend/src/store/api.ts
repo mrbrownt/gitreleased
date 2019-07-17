@@ -3,7 +3,9 @@ import { User, Repo } from "./models"
 import PubSub from "pubsub-js"
 
 export const gitReleasedAPI = axios.create({
-    baseURL: "http://localhost:8081",
+    baseURL: process.env.production
+        ? "https://api.gitreleased.app"
+        : "http://localhost:8080",
 })
 
 export async function getUser(): Promise<User> {

@@ -1,39 +1,14 @@
-package main
+package config
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/getsentry/raven-go"
-	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"github.com/gobuffalo/envy"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/github"
 )
-
-func main() {
-	envy.Load()
-	config()
-	setupGoth()
-
-	router := gin.Default()
-
-	if sentryDSN := envy.Get("SENTRY_DSN", ""); sentryDSN != "" {
-		router.Use(sentry.Recovery(raven.DefaultClient, false))
-	}
-
-	authHandler(router.Group("/auth"))
-
-	if environment == "production" {
-		gin.SetMode("release")
-	}
-
-	port := envy.Get("PORT", "8082")
-	router.Run("0.0.0.0:" + port)
-}
 
 func setupGoth() {
 
@@ -41,7 +16,7 @@ func setupGoth() {
 	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
 
 	var secure = false
-	if environment == "production" {
+	if globalConf.Environment == "production" {
 		secure = true
 	}
 
@@ -49,11 +24,11 @@ func setupGoth() {
 		Secure:   secure,
 		HttpOnly: true,
 		Path:     "/",
-		Domain:   baseURL,
+		Domain:   globalConf.BaseURL,
 	})
 	gothic.Store = store
 
-	callbackURL := fmt.Sprintf("http://%s:8080/auth/callback/github", baseURL)
+	callbackURL := fmt.Sprintf("http://%s:8080/auth/callback/github", globalConf.BaseURL)
 
 	// Auth providers
 	goth.UseProviders(

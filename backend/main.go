@@ -26,10 +26,7 @@ func init() {
 }
 
 func main() {
-	gc, err := config.New()
-	if err != nil {
-		logrus.Fatalln(err)
-	}
+	gc := config.Get()
 	defer gc.DB.Close()
 
 	router := gin.Default()
@@ -41,7 +38,10 @@ func main() {
 	handlers.UserHandler(api.Group("/user"))
 	handlers.RepoHandler(api.Group("/repo"))
 
-	err = router.Run("0.0.0.0:" + gc.Port)
+	auth := router.Group("/auth")
+	handlers.AuthHandler(auth)
+
+	err := router.Run("0.0.0.0:" + gc.Port)
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
 	}

@@ -33,11 +33,7 @@ func getUser(c *gin.Context) {
 
 	user := models.User{}
 
-	conf, err := config.Get()
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
+	conf := config.Get()
 
 	conf.DB.Where("id = ?", id.(string)).First(&user)
 	if user.ID == uuid.Nil {
@@ -50,11 +46,7 @@ func getUser(c *gin.Context) {
 }
 
 func subscribeToRepo(c *gin.Context) {
-	conf, err := config.Get()
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
+	conf := config.Get()
 
 	repoQuery := c.Query("repo")
 	if repoQuery == "" {
@@ -126,14 +118,18 @@ func subscribeToRepo(c *gin.Context) {
 
 func createSubscription(userID, repoID uuid.UUID, db *gorm.DB) (err error) {
 	sub := models.Subscriptions{}
-	db.Where(models.Subscriptions{Repo: repoID, User: userID}).First(&sub)
-	if sub.ID != 0 {
+	err = db.Where(models.Subscriptions{RepoID: repoID, UserID: userID}).First(&sub).Error
+	if !gorm.IsRecordNotFoundError(err) {
+		return err
+	}
+
+	if sub.RepoID != uuid.Nil {
 		return nil
 	}
 
 	return db.Create(&models.Subscriptions{
-		User: userID,
-		Repo: repoID,
+		UserID: userID,
+		RepoID: repoID,
 	}).Error
 }
 
@@ -188,13 +184,13 @@ func getSubscriptions(c *gin.Context) {
 		return
 	}
 
-	conf, _ := config.Get()
+	conf := config.Get()
 	repos := []models.Repository{}
 
 	err := conf.DB.
 		Table("repositories").
 		Select("*").
-		Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo AND subscriptions.\"user\" = ?", k.(string)).
+		Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo_id AND subscriptions.user_id = ?", k.(string)).
 		Scan(&repos).Error
 	if err != nil {
 		c.AbortWithStatusJSON(

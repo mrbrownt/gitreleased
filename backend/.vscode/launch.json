@@ -10,9 +10,10 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}",
-      "env": { "GO111MODULE": "on" },
+      "env": {
+        "GO111MODULE": "on"
+      },
       "args": [],
-      "buildFlags": "-mod=vendor"
     }
   ]
 }

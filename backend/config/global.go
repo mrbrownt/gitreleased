@@ -1,7 +1,7 @@
 package config
 
 import (
-	"errors"
+	"log"
 
 	"github.com/gobuffalo/envy"
 	"github.com/jinzhu/gorm"
@@ -13,30 +13,28 @@ type Global struct {
 	BaseURL     string
 	DB          *gorm.DB
 	Environment string
-	callCount   int
+	initialized bool
 }
 
 var globalConf Global
 
-// New global config, only call this once from main
-func New() (gc Global, err error) {
-	globalConf.callCount = globalConf.callCount + 1
-	if globalConf.callCount != 1 {
-		return gc, errors.New("conf.New() callend more than once")
+// Get global config, only call this once from main
+func Get() (gc Global) {
+	if globalConf.initialized {
+		return globalConf
 	}
 
 	globalConf.Port = envy.Get("PORT", "3000")
-	globalConf.BaseURL = envy.Get("BASE_URL", "localhost:"+globalConf.Port)
+	globalConf.BaseURL = envy.Get("BASE_URL", "localhost")
 	globalConf.Environment = envy.Get("ENVIRONMENT", "development")
 
-	err = setupDB()
-	return globalConf, err
-}
-
-// Get global config after it's been setup
-func Get() (gc Global, err error) {
-	if globalConf.callCount != 1 {
-		return gc, errors.New("config.New() hasn't been called")
+	err := setupDB()
+	if err != nil {
+		log.Fatalln(err)
 	}
-	return globalConf, err
+
+	setupGoth()
+
+	globalConf.initialized = true
+	return globalConf
 }
