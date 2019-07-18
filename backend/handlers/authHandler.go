@@ -34,20 +34,20 @@ func callback(c *gin.Context) {
 
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		internalServerError(c, err)
 		return
 	}
 
 	u := &models.User{}
 	exist, err := doesUserExist(&user, u)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		internalServerError(c, err)
 		return
 	}
 	if !exist {
 		err = createUser(&user, u)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+			internalServerError(c, err)
 			return
 		}
 	}
@@ -77,7 +77,7 @@ func createUser(callbackUser *goth.User, user *models.User) (err error) {
 		return err
 	}
 
-	return err
+	return nil
 }
 
 // Checks if the user exists and returns a bunch of shit, this should be
@@ -119,7 +119,8 @@ func createJWT(user *models.User) (signedToken string, err error) {
 func returnUserAndJWT(c *gin.Context, u *models.User) {
 	jwt, err := createJWT(u)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotImplemented)
+		internalServerError(c, err)
+		return
 	}
 
 	url := config.Get().BaseURL
