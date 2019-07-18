@@ -129,7 +129,7 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 
 	userURL := "/#/user"
 	if config.Get().Environment == "production" {
-		userURL = fmt.Sprintf("https://%s/%s", url, userURL)
+		userURL = fmt.Sprintf("https://www.gitreleased.app/%s", userURL)
 	}
 
 	c.Redirect(http.StatusSeeOther, userURL)
