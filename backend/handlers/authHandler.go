@@ -125,6 +125,9 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 	}
 
 	url := config.Get().BaseURL
+	if config.Get().Environment == "production" {
+		url = "www.gitreleased.app"
+	}
 	c.SetCookie("Authorization", jwt, 3600, "/", url, false, true)
 
 	userURL := "/#/user"
