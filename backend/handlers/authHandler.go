@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -125,5 +126,11 @@ func returnUserAndJWT(c *gin.Context, u *models.User) {
 
 	url := config.Get().BaseURL
 	c.SetCookie("Authorization", jwt, 3600, "/", url, false, true)
-	c.Redirect(http.StatusSeeOther, "/#/user")
+
+	userURL := "/#/user"
+	if config.Get().Environment == "production" {
+		userURL = fmt.Sprintf("https://%s/%s", url, userURL)
+	}
+
+	c.Redirect(http.StatusSeeOther, userURL)
 }
