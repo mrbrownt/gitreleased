@@ -9,6 +9,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/getsentry/raven-go v0.2.0
+	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-contrib/sentry v0.0.0-20190528141903-48a399dfd39f
 	github.com/gin-gonic/contrib v0.0.0-20190526021735-7fb7810ed2a0
 	github.com/gin-gonic/gin v1.4.0

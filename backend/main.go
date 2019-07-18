@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/gin-contrib/cors"
+
 	raven "github.com/getsentry/raven-go"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
@@ -37,6 +39,15 @@ func main() {
 	router := gin.Default()
 
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
+
+	if gc.Environment == "production" {
+		router.Use(cors.New(cors.Config{
+			AllowOrigins:  []string{"https://www.gitreleased.app"},
+			AllowMethods:  []string{"PUT", "GET", "POST"},
+			AllowHeaders:  []string{"Origin", "Authorization"},
+			ExposeHeaders: []string{"Content-Length", "Authorization"},
+		}))
+	}
 
 	api := router.Group("/api")
 
