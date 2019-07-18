@@ -9,5 +9,10 @@ import (
 
 func internalServerError(c *gin.Context, err error) {
 	c.AbortWithStatus(http.StatusInternalServerError)
-	raven.CaptureError(err, nil)
+	cookie, cookieErr := c.Cookie("_gothic_session")
+	if cookieErr != nil {
+		raven.CaptureError(err, nil)
+	} else {
+		raven.CaptureError(err, map[string]string{"_gothic_session: cookie": cookie})
+	}
 }

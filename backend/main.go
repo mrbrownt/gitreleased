@@ -29,6 +29,11 @@ func main() {
 	gc := config.Get()
 	defer gc.DB.Close()
 
+	//  Git mode must be set before gin.Default
+	if gc.Environment == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	router := gin.Default()
 
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
@@ -40,10 +45,6 @@ func main() {
 
 	auth := router.Group("/auth")
 	handlers.AuthHandler(auth)
-
-	if gc.Environment == "production" {
-		gin.SetMode(gin.ReleaseMode)
-	}
 
 	err := router.Run("0.0.0.0:" + gc.Port)
 	if err != nil {
