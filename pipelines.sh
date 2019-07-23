@@ -42,6 +42,8 @@ build() {
         setupGCP
         gcloud builds submit \
             --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
+            --machine-type="n1-highcpu-8" \
+            --disk-size="1000G" \
             --tag="${GCR_BACKEND_IMG}" .
         ;;
     *)
@@ -71,7 +73,7 @@ deploy() {
             --set-env-vars "DB_HOST=spheric-subject-165900:us-central1:gitreleased" \
             --set-env-vars "DB_PASS=${DB_PASS}" \
             --set-env-vars "SENTRY_DSN=${SENTRY_DSN_BACKEND}" \
-            --set-env-vars "BASE_URL=api.gitreleased.app"
+            --set-env-vars "BASE_URL=www.gitreleased.app"
         ;;
     esac
 }
