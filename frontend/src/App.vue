@@ -11,11 +11,10 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <template v-if="user">
-                    <v-btn :href="authLogout" flat>Logout</v-btn>
+                    <v-btn href="/auth/logout" flat>Logout</v-btn>
                 </template>
                 <template v-else>
-                    <v-btn flat :href="authProviderGithub">Login</v-btn>
-                    <!-- <v-btn flat :href="authURL">Login</v-btn> -->
+                    <v-btn flat href="/auth?provider=github">Login</v-btn>
                 </template>
             </v-toolbar-items>
         </v-toolbar>
@@ -41,12 +40,6 @@ import Sidebar from "@/components/Sidebar.vue"
 @Component({ components: { Sidebar } })
 export default class extends Vue {
     private drawer: boolean = false
-    private authProviderGithub: string = process.env.NODE_ENV === 'production'
-        ? "https://api.gitreleased.app/auth/?provider=github"
-        : "/auth?provider=github"
-    private authLogout: string = process.env.NODE_ENV === 'production'
-        ? "https://api.gitreleased/auth/logout"
-        : "/auth/logout"
 
     get user() {
         return user.user
