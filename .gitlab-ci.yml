@@ -39,28 +39,6 @@ build backend:
     - ./pipelines.sh build backend
   dependencies: []
 
-build frontend:
-  stage: test and build
-  image: google/cloud-sdk:alpine
-  tags:
-    - docker
-  script:
-    - ./pipelines.sh build frontend
-
-deploy frontend:
-  stage: deploy
-  image: google/cloud-sdk:slim
-  tags:
-    - docker
-  script:
-    - ./pipelines.sh deploy frontend
-  only:
-    refs:
-      - master
-  dependencies: []
-  environment:
-    name: production
-
 deploy backend:
   stage: deploy
   image: google/cloud-sdk:slim

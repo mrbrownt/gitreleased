@@ -3,8 +3,6 @@ package main
 import (
 	"os"
 
-	"github.com/gin-contrib/cors"
-
 	raven "github.com/getsentry/raven-go"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
@@ -40,25 +38,32 @@ func main() {
 
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
 
-	if gc.Environment == "production" {
-		router.Use(cors.New(cors.Config{
-			AllowOrigins:  []string{"https://www.gitreleased.app"},
-			AllowMethods:  []string{"PUT", "GET", "POST"},
-			AllowHeaders:  []string{"Origin", "Authorization"},
-			ExposeHeaders: []string{"Content-Length", "Authorization"},
-		}))
-	}
-
 	api := router.Group("/api")
-
 	handlers.UserHandler(api.Group("/user"))
 	handlers.RepoHandler(api.Group("/repo"))
 
 	auth := router.Group("/auth")
 	handlers.AuthHandler(auth)
 
+	if gc.Environment == "production" {
+		router.Use(cachingHeaders())
+		router.StaticFile("/", "./dist/index.html")
+		router.StaticFile("/index.html", "./dist/index.html")
+		router.StaticFile("/index.htm", "./dist/index.html")
+		router.Static("/js", "./dist/js")
+		router.Static("/css", "./dist/css")
+		router.Static("/img", "./dist/img")
+	}
+
 	err := router.Run("0.0.0.0:" + gc.Port)
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
+	}
+}
+
+func cachingHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Cache-Control", "max-age=31622400")
+		c.Next()
 	}
 }

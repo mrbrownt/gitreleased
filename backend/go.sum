@@ -79,8 +79,6 @@ github.com/fsouza/fake-gcs-server v1.7.0/go.mod h1:5XIRs4YvwNbNoz+1JF8j6KLAyDh7R
 github.com/getsentry/raven-go v0.2.0 h1:no+xWJRb5ZI7eE8TWgIq1jLulQiIoLG0IfYxv5JYMGs=
 github.com/getsentry/raven-go v0.2.0/go.mod h1:KungGk8q33+aIAZUIVWZDr2OfAEBsO49PX4NzFV5kcQ=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
-github.com/gin-contrib/cors v1.3.0 h1:PolezCc89peu+NgkIWt9OB01Kbzt6IP0J/JvkG6xxlg=
-github.com/gin-contrib/cors v1.3.0/go.mod h1:artPvLlhkF7oG06nK8v3U8TNz6IeX+w1uzCSEId5/Vc=
 github.com/gin-contrib/sentry v0.0.0-20190528141903-48a399dfd39f h1:8ca+DCcmRoyMHDU0LRgcIAXVpQMk5f/OH018Sm4KY3k=
 github.com/gin-contrib/sentry v0.0.0-20190528141903-48a399dfd39f/go.mod h1:oOzKy7hEPRwY5vUSRj1Bi5L8ZD1YEtRjLy9dx/Ga8LA=
 github.com/gin-contrib/sse v0.0.0-20190301062529-5545eab6dad3 h1:t8FVkw33L+wilf2QiWkw0UV77qRpcH/JHPKGpKa2E8g=

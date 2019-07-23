@@ -7,7 +7,6 @@ set -e
 export DOCKER_HOST="tcp://docker:2375"
 
 GCR_IMAGE_BASE=us.gcr.io/spheric-subject-165900/gitreleased
-GCR_FRONTEND_IMG="$GCR_IMAGE_BASE/frontend:${CI_COMMIT_SHA}"
 GCR_BACKEND_IMG="${GCR_IMAGE_BASE}/backend:${CI_COMMIT_SHA}"
 
 setupGCP() {
@@ -40,18 +39,10 @@ testApp() {
 build() {
     case ${1} in
     backend)
-        cd backend
         setupGCP
         gcloud builds submit \
             --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
             --tag="${GCR_BACKEND_IMG}" .
-        ;;
-    frontend)
-        cd frontend
-        setupGCP
-        gcloud builds submit \
-            --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
-            --tag="${GCR_FRONTEND_IMG}" .
         ;;
     *)
         echo "unknown build product"
@@ -63,14 +54,6 @@ build() {
 deploy() {
 
     case ${1} in
-    frontend)
-        setupGCP
-
-        gcloud beta run deploy gitreleased-frontend \
-            --project spheric-subject-165900 \
-            --region us-central1 \
-            --image "${GCR_FRONTEND_IMG}"
-        ;;
     backend)
         setupGCP
 
