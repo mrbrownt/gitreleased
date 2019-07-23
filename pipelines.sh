@@ -42,8 +42,6 @@ build() {
         setupGCP
         gcloud builds submit \
             --gcs-log-dir="gs://spheric-subject-165900_cloudbuild/logs" \
-            --machine-type="n1-highcpu-8" \
-            --disk-size="1000G" \
             --tag="${GCR_BACKEND_IMG}" .
         ;;
     *)
