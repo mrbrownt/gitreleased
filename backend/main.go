@@ -50,6 +50,7 @@ func main() {
 		router.StaticFile("/", "./dist/index.html")
 		router.StaticFile("/index.html", "./dist/index.html")
 		router.StaticFile("/index.htm", "./dist/index.html")
+		router.StaticFile("/favicon.ico", "./dist/favicon.ico")
 		router.Static("/js", "./dist/js")
 		router.Static("/css", "./dist/css")
 		router.Static("/img", "./dist/img")
@@ -63,7 +64,7 @@ func main() {
 
 func cachingHeaders() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("Cache-Control", "max-age=31622400")
+		c.Header("Cache-Control", "max-age=31622400, public")
 		c.Next()
 	}
 }
