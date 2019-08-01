@@ -10,7 +10,7 @@ import (
 	"github.com/markbates/goth/providers/github"
 )
 
-func setupGoth() {
+func configGoth() {
 
 	// This stupid thing is added just so goth will work, uses a temp cookie
 	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))

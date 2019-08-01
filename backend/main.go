@@ -1,7 +1,9 @@
 package main
 
 import (
+	"net/http"
 	"os"
+	"strings"
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gin-contrib/sentry"
@@ -47,6 +49,7 @@ func main() {
 
 	if gc.Environment == "production" {
 		router.Use(cachingHeaders())
+		router.Use(redrectNaked())
 		router.StaticFile("/", "./dist/index.html")
 		router.StaticFile("/index.html", "./dist/index.html")
 		router.StaticFile("/index.htm", "./dist/index.html")
@@ -59,6 +62,17 @@ func main() {
 	err := router.Run("0.0.0.0:" + gc.Port)
 	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
+	}
+}
+
+func redrectNaked() (middleware gin.HandlerFunc) {
+	return func(c *gin.Context) {
+		host := c.Request.Host
+		if strings.HasPrefix(host, "gitreleased.app") {
+			c.Redirect(http.StatusPermanentRedirect, "www.gitrelased.app")
+		}
+
+		c.Next()
 	}
 }
 

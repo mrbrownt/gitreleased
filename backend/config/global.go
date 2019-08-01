@@ -33,7 +33,7 @@ func Get() (gc Global) {
 		log.Fatalln(err)
 	}
 
-	setupGoth()
+	configGoth()
 
 	globalConf.initialized = true
 	return globalConf
