@@ -69,7 +69,7 @@ func redrectNaked() (middleware gin.HandlerFunc) {
 	return func(c *gin.Context) {
 		host := c.Request.Host
 		if strings.HasPrefix(host, "gitreleased.app") {
-			c.Redirect(http.StatusPermanentRedirect, "www.gitrelased.app")
+			c.Redirect(http.StatusPermanentRedirect, "https://www.gitrelased.app")
 		}
 
 		c.Next()
