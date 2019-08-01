@@ -1,3 +1,5 @@
 {
-    "go.formatTool": "goimports"
+    "go.formatTool": "goimports",
+    "editor.formatOnSave": true,
+    "go.lintTool": "golangci-lint"
 }
