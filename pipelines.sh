@@ -61,6 +61,7 @@ deploy() {
             --project spheric-subject-165900 \
             --region us-central1 \
             --image "${GCR_BACKEND_IMG}" \
+            --platform managed \
             --set-env-vars "GITHUB_KEY=${GITHUB_KEY}" \
             --set-env-vars "GITHUB_SECRET=${GITHUB_SECRET}" \
             --set-env-vars "GITLAB_USER=mrbrownt" \
