@@ -38,7 +38,11 @@ func main() {
 
 	router := gin.Default()
 
-	router.Use(sentry.Recovery(raven.DefaultClient, false))
+	if gc.Environment == "production" {
+		router.Use(productionHeaders)
+		router.Use(redrectNaked)
+		router.Use(sentry.Recovery(raven.DefaultClient, false))
+	}
 
 	api := router.Group("/api")
 	handlers.UserHandler(api.Group("/user"))
@@ -48,8 +52,8 @@ func main() {
 	handlers.AuthHandler(auth)
 
 	if gc.Environment == "production" {
-		router.Use(cachingHeaders())
-		router.Use(redrectNaked())
+		// Static files and cache control
+		router.Use(cachingHeaders)
 		router.StaticFile("/", "./dist/index.html")
 		router.StaticFile("/index.html", "./dist/index.html")
 		router.StaticFile("/index.htm", "./dist/index.html")
@@ -65,20 +69,22 @@ func main() {
 	}
 }
 
-func redrectNaked() (middleware gin.HandlerFunc) {
-	return func(c *gin.Context) {
-		host := c.Request.Host
-		if strings.HasPrefix(host, "gitreleased.app") {
-			c.Redirect(http.StatusPermanentRedirect, "https://www.gitrelased.app")
-		}
-
-		c.Next()
+func redrectNaked(c *gin.Context) {
+	host := c.Request.Host
+	proto := c.Request.Header.Get("X-Forwarded-Proto")
+	if strings.HasPrefix(host, "gitreleased.app") || proto != "https" {
+		c.Redirect(http.StatusPermanentRedirect, "https://www.gitrelased.app")
 	}
+
+	c.Next()
 }
 
-func cachingHeaders() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Header("Cache-Control", "max-age=31622400, public")
-		c.Next()
-	}
+func cachingHeaders(c *gin.Context) {
+	c.Header("Cache-Control", "max-age=31622400, public")
+	c.Next()
+}
+
+func productionHeaders(c *gin.Context) {
+	c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+	c.Next()
 }
