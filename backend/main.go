@@ -52,11 +52,13 @@ func main() {
 	handlers.AuthHandler(auth)
 
 	if gc.Environment == "production" {
-		// Static files and cache control
-		router.Use(cachingHeaders)
+		// Index
 		router.StaticFile("/", "./dist/index.html")
 		router.StaticFile("/index.html", "./dist/index.html")
 		router.StaticFile("/index.htm", "./dist/index.html")
+
+		// Assets that should be cached
+		router.Use(cachingHeaders)
 		router.StaticFile("/favicon.ico", "./dist/favicon.ico")
 		router.Static("/js", "./dist/js")
 		router.Static("/css", "./dist/css")
@@ -74,8 +76,8 @@ func redrectNaked(c *gin.Context) {
 	proto := c.Request.Header.Get("X-Forwarded-Proto")
 	if strings.HasPrefix(host, "gitreleased.app") || proto != "https" {
 		c.Redirect(http.StatusPermanentRedirect, "https://www.gitrelased.app")
+		c.Abort()
 	}
-
 	c.Next()
 }
 
