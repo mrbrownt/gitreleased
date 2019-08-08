@@ -88,5 +88,8 @@ func cachingHeaders(c *gin.Context) {
 
 func productionHeaders(c *gin.Context) {
 	c.Header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+	c.Header("X-Content-Type-Options", "nosniff")
+	c.Header("X-Frame-Options", "DENY")
+	c.Header("X-XSS-Protection", "1; mode=block")
 	c.Next()
 }
