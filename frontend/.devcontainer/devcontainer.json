@@ -11,7 +11,6 @@
     // Uncomment the next line to run commands after the container is created.
     "postCreateCommand": "yarn install",
     "extensions": [
-        "dbaeumer.vscode-eslint",
         "octref.vetur",
         "esbenp.prettier-vscode",
         "ms-vscode.vscode-typescript-tslint-plugin",

@@ -6,7 +6,7 @@ import {
 } from "vuex-module-decorators"
 import { User, Repo } from "../models"
 import { getUser, getSubscriptions, subscribe } from "../api"
-import store from "@/store/store"
+import store from "@/store"
 
 @Module({
     dynamic: true,

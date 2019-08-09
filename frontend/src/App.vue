@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator"
 import { mapState } from "vuex"
-import store from "@/store/store"
+import store from "@/store"
 import user from "@/store/modules/user"
 import { User } from "@/store/models"
 import Sidebar from "@/components/Sidebar.vue"
@@ -45,11 +45,11 @@ export default class extends Vue {
         return user.user
     }
 
-    public get loading(): boolean {
+    get loading(): boolean {
         return store.state.loading
     }
 
-    public async created() {
+    private async created() {
         await user.loadUser()
     }
 }
