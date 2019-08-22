@@ -7,7 +7,7 @@ COPY backend /app
 ENV GO111MODULE=on
 ENV GOPROXY=https://proxy.golang.org
 
-RUN go install
+RUN go install -tags=jsoniter
 
 # Yarn build
 FROM node:11 as js-build

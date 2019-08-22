@@ -10,6 +10,7 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}",
+      "buildFlags": "-tags=jsoniter",
       "env": {
         "GO111MODULE": "on"
       },

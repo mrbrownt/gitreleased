@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 
@@ -19,7 +20,7 @@ import (
 func UserHandler(r *gin.RouterGroup) {
 	r.Use(authMiddleware())
 	r.GET("/", getUser)
-	r.POST("/subcribe", subscribeToRepo)
+	r.POST("/subscribe", subscribeToRepo)
 	r.GET("/subscriptions", getSubscriptions)
 }
 
@@ -32,10 +33,9 @@ func getUser(c *gin.Context) {
 	}
 
 	user := models.User{}
+	db := config.Get().DB
 
-	conf := config.Get()
-
-	conf.DB.Where("id = ?", id.(string)).First(&user)
+	db.Where("id = ?", id.(uuid.UUID).String()).First(&user)
 	if user.ID == uuid.Nil {
 		// Something really shitty has happened if you hit this!
 		c.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
@@ -54,37 +54,50 @@ func subscribeToRepo(c *gin.Context) {
 		return
 	}
 
-	if slash := strings.Contains(repoQuery, "/"); !slash {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "repo query not formatted correctly"})
-		return
-	}
-
-	userID, exists := c.Get("id")
+	id, exists := c.Get("id")
 	if !exists {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
+	userID, ok := id.(uuid.UUID)
+	if !ok {
+		internalServerError(c, errors.New("Invalid user ID"))
+	}
 
-	repoSlice := strings.Split(repoQuery, "/")
-
-	repo := models.Repository{}
-	conf.DB.Where(
-		models.Repository{
-			Owner: repoSlice[0],
-			Name:  repoSlice[1],
-		},
-	).First(&repo)
-
-	userUUID, err := uuid.FromString(userID.(string))
-	if err != nil {
+	tx := conf.DB.Begin()
+	user := models.User{ID: userID}
+	if !user.Valid(tx) {
 		c.AbortWithStatusJSON(
 			http.StatusInternalServerError,
-			gin.H{"error": err.Error()},
+			gin.H{"error": "unknown user"},
 		)
 	}
 
-	var NilUUID = uuid.UUID{}
-	if repo.ID == NilUUID {
-		repoModel, err := createGithubRepo(userID.(string), repoSlice, conf.DB)
+	owner, name, err := parseRepoQuery(repoQuery)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	repo := models.Repository{
+		Owner: owner,
+		Name:  name,
+	}
+
+	if repo.Exists(tx) {
+		subscription := models.Subscriptions{RepoID: repo.ID, UserID: user.ID}
+		err := subscription.Create(tx)
+		if err != nil {
+			tx.Rollback()
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		c.Status(http.StatusCreated)
+		return
+	}
+
+	repoSlice := []string{owner, name}
+	if repo.ID == uuid.Nil {
+		repoModel, err := createGithubRepo(userID.String(), repoSlice, tx)
 		if err != nil {
 			c.AbortWithStatusJSON(
 				http.StatusNotFound,
@@ -94,7 +107,7 @@ func subscribeToRepo(c *gin.Context) {
 			return
 		}
 
-		err = createSubscription(userUUID, repoModel.ID, conf.DB)
+		err = createSubscription(userID, repoModel.ID, tx)
 		if err != nil {
 			c.AbortWithStatusJSON(
 				http.StatusInternalServerError,
@@ -103,7 +116,7 @@ func subscribeToRepo(c *gin.Context) {
 			return
 		}
 	} else {
-		err = createSubscription(userUUID, repo.ID, conf.DB)
+		err = createSubscription(userID, repo.ID, tx)
 	}
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -113,7 +126,27 @@ func subscribeToRepo(c *gin.Context) {
 		return
 	}
 
+	err = tx.Commit().Error
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+
 	c.Status(http.StatusCreated)
+}
+
+func parseRepoQuery(query string) (owner string, name string, err error) {
+	if !strings.Contains(query, "/") {
+		return "", "", errors.New("repo string should be formatted \"owner/name\"")
+	}
+
+	splitQuery := strings.Split(query, "/")
+	owner = splitQuery[0]
+	name = splitQuery[1]
+	return owner, name, nil
 }
 
 func createSubscription(userID, repoID uuid.UUID, db *gorm.DB) (err error) {
@@ -178,10 +211,14 @@ func setupGithubClient(token string) (client *githubv4.Client) {
 }
 
 func getSubscriptions(c *gin.Context) {
-	k, exists := c.Get("id")
+	id, exists := c.Get("id")
 	if !exists {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
+	}
+	userID, ok := id.(uuid.UUID)
+	if !ok {
+		internalServerError(c, errors.New("user id"))
 	}
 
 	conf := config.Get()
@@ -190,8 +227,9 @@ func getSubscriptions(c *gin.Context) {
 	err := conf.DB.
 		Table("repositories").
 		Select("*").
-		Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo_id AND subscriptions.user_id = ?", k.(string)).
-		Scan(&repos).Error
+		Joins("INNER JOIN subscriptions ON repositories.id = subscriptions.repo_id AND subscriptions.user_id = ?", userID.String()).
+		Scan(&repos).
+		Error
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusInternalServerError,

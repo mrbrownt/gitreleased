@@ -7,6 +7,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
 )
 
 // authMiddleware adds id and admin to Context keys.
@@ -43,7 +44,19 @@ func authMiddleware() gin.HandlerFunc {
 				return
 			}
 
-			c.Set("id", claims["id"])
+			userIDString, ok := claims["id"].(string)
+			if !ok {
+				internalServerError(c, errors.New("user id is not a string"))
+				return
+			}
+
+			userID, err := uuid.FromString(userIDString)
+			if err != nil {
+				internalServerError(c, err)
+				return
+			}
+
+			c.Set("id", userID)
 			c.Set("admin", admin)
 			c.Next()
 			return

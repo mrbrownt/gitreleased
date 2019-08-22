@@ -5,7 +5,7 @@ import {
     MutationAction,
 } from "vuex-module-decorators"
 import { User, Repo } from "../models"
-import { getUser, getSubscriptions, subscribe } from "../api"
+import { gitReleasedAPI } from "../api"
 import store from "@/store"
 
 @Module({
@@ -20,9 +20,7 @@ class UserModule extends VuexModule {
 
     @MutationAction
     public async loadUser() {
-        store.state.loading = true
         const user = await getUser()
-        store.state.loading = false
         return { user }
     }
 
@@ -38,6 +36,20 @@ class UserModule extends VuexModule {
         const subscriptions = await getSubscriptions()
         return { subscriptions }
     }
+}
+
+async function getUser() {
+    const response = await gitReleasedAPI.get("/api/user")
+    return response.data
+}
+
+async function getSubscriptions() {
+    const response = await gitReleasedAPI.get("/api/user/subscriptions")
+    return response.data
+}
+
+async function subscribe(repo: string) {
+    await gitReleasedAPI.post("/api/user/subscribe?repo=" + repo)
 }
 
 export default getModule(UserModule)

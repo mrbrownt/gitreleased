@@ -6,7 +6,7 @@ import {
 } from "vuex-module-decorators"
 import store from "@/store"
 import { Repo } from "../models"
-import { getRepo } from "../api"
+import { gitReleasedAPI } from "../api"
 import user from "./user"
 
 @Module({
@@ -26,12 +26,16 @@ class RepoModule extends VuexModule {
 
     @MutationAction({ mutate: ["repo"] })
     public async loadRepo(repoID: string) {
-        const localStore = user.subscriptions.find(repo => repo.id === repoID)
-        if (localStore) {
-            return { repo: localStore }
+        let foundRepo: Repo | undefined
+
+        foundRepo = user.subscriptions.find(data => data.id === repoID)
+        if (foundRepo) {
+            return { repo: foundRepo }
         }
-        const result = await getRepo(repoID)
-        return { repo: result }
+
+        const response = await gitReleasedAPI.get("/api/repo" + repoID)
+        foundRepo = response.data as Repo
+        return { repo: foundRepo }
     }
 }
 

@@ -43,7 +43,7 @@ build backend:
     - ./pipelines.sh build backend
   dependencies: []
 
-deploy backend:
+deploy:
   stage: deploy
   image: google/cloud-sdk:slim
   tags:

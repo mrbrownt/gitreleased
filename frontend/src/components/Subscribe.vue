@@ -25,6 +25,7 @@ export default class SubscribeForm extends Vue {
 
     private async subscribe() {
         await user.addSub(this.newSubscription)
+        this.newSubscription = ""
     }
 }
 </script>

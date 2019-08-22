@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 // Repository currnt matches github repo
@@ -15,4 +16,10 @@ type Repository struct {
 	Name        string    `json:"name,omitempty" db:"name"`
 	Description string    `json:"description,omitempty" db:"description"`
 	URL         string    `json:"url,omitempty" db:"url"`
+}
+
+// Exists checks if the record exists
+func (r *Repository) Exists(db *gorm.DB) bool {
+	db.Where(r).First(&r)
+	return r.ID != uuid.Nil
 }

@@ -6,6 +6,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 // User they do things
@@ -30,4 +31,9 @@ func (u *User) BeforeCreate() (err error) {
 		validation.Field(&u.Email, is.Email),
 		validation.Field(&u.GithubID, validation.Required),
 	)
+}
+
+func (u *User) Valid(db *gorm.DB) bool {
+	db.Where(u).First(&u)
+	return u.ID != uuid.Nil
 }
