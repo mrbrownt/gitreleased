@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-version: "3"
+version: "3.7"
 services:
   frontend:
     build:
@@ -11,12 +11,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-
-
     volumes:
-      - ..:/workspace
-
-    # Overrides default command so things don't shut down after the process ends.
+      - type: bind
+        source: ..
+        target: /workspace
+        consistency: cached
     command: sleep infinity
 
 networks:

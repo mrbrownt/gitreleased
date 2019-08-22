@@ -29,6 +29,16 @@ RUN apt-get update \
     # Install eslint globally
     && npm install -g eslint \
     #
+    # Install cypress dependencies
+    && apt-get -y install --no-install-recommends \
+        xvfb \
+        libgtk-3-dev \
+        libnotify-dev \
+        libgconf-2-4 \
+        libnss3 \
+        libxss1 \
+        libasound2 \
+    #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
